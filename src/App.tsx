@@ -7,7 +7,7 @@ function App() {
     <Box as="div" className="App">
       <Box as="header" className="App-header">
         <Image as="img" src={logo} className="App-logo" alt="logo" />
-        <Text as={'p'}>
+        <Text as="p">
           Edit <Code as="code">src/App.tsx</Code> and save to reload.
         </Text>
         <Link
