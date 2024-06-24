@@ -1,27 +1,16 @@
-import logo from './logo.svg'
-import './App.css'
-import { Box, Code, Heading, Image, Link, Text } from '@chakra-ui/react'
+import React from 'react'
+import { Route, Routes } from 'react-router-dom'
+import { APP_PATHS } from './paths'
+import { HomePage } from './pages/Home'
+import { TermsPage } from './pages/Terms'
 
-function App() {
+const App: React.FC = () => {
   return (
-    <Box as="div" className="App">
-      <Box as="header" className="App-header">
-        <Image as="img" src={logo} className="App-logo" alt="logo" />
-        <Text as="p">
-          Edit <Code as="code">src/App.tsx</Code> and save to reload.
-        </Text>
-        <Link
-          as="a"
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </Link>
-        <Heading as="h1">Hello, world!</Heading>
-      </Box>
-    </Box>
+    <Routes>
+      <Route path={APP_PATHS.home} element={<HomePage />} />
+      <Route path={APP_PATHS.termsAndConditions} element={<TermsPage />} />
+      {/* <Route path="*" element={<NotFound />} /> */}
+    </Routes>
   )
 }
 
