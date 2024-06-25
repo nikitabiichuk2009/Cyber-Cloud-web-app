@@ -1,29 +1,37 @@
 // import React from 'react'
-import { useNavigate } from 'react-router-dom'
+// import { useNavigate } from 'react-router-dom'
 
-import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react'
-import { APP_PATHS } from '../paths'
+import { Heading, Image, Text, VStack } from '@chakra-ui/react'
+// import { APP_PATHS } from '../paths'
 
 export const HomePage = () => {
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
 
   return (
-    <Flex direction="column" minH="100vh" bgColor="mainPageBlack">
-      <Box p={5}>
-        <Heading as="h1" size="xl" mb={4}>
-          Welcome to Chakra UI with TypeScript
+    <VStack alignItems="center" gap={{ base: '10px', md: '30px' }}>
+      <VStack
+        alignItems="center"
+        px={{ base: '12px', md: '50px' }}
+        gap="16px"
+        textShadow="0px 0px 1px #040404"
+        textAlign="center"
+      >
+        <Heading as="h2" color="mainGreen">
+          Welcome to Your Cyber Citizenship!
         </Heading>
-        <Text fontSize="lg" mb={4}>
-          This is a simple example of a React app using Chakra UI and TypeScript.
+        <Heading variant="h3" size="lg" as="h3">
+          Let&apos;s Build Your Digital Profile Together!
+        </Heading>
+
+        <Text fontSize={{ base: 'lg', md: '2xl' }} fontWeight="medium">
+          Step into the future with CyberCloud, where your digital identity takes center stage.
+          Our platform enables you to create digital certificates tailored to your chosen social
+          networks and platforms. Join us in crafting a seamless and personalized digital
+          experience just for you. Your journey to a strong and secure digital profile begins
+          here. Welcome aboard!
         </Text>
-        <Button
-          colorScheme="teal"
-          size="md"
-          onClick={() => navigate(APP_PATHS.termsAndConditions)}
-        >
-          Terms and condition
-        </Button>
-      </Box>
-    </Flex>
+      </VStack>
+      <Image src="/images/map_img.svg" alt="Map" objectFit="cover" w="100%" />
+    </VStack>
   )
 }

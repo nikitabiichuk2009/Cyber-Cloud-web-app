@@ -23,32 +23,32 @@ export const TermsPage = () => {
   return (
     <Flex direction="column" minH="100vh">
       {/* <Header /> */}
-      <Container as="main" maxW="container.xl" flex="1" p="28px 16px 80px 16px">
+      <Container as="main" maxW="container.2xl" flex="1" p="16px 16px 20px 16px">
         <Box layerStyle="outline" py="32px" px="32px">
-          <Heading as="h1" color="white" alignContent="center">
+          <Heading as="h1" color="mainGreen" textAlign="center">
             {`Terms and condition`}
           </Heading>
 
           <VStack spacing="32px" alignItems="flex-start">
             <VStack spacing="16px" alignItems="flex-start">
-              <Heading as="h2" size="md" color="white" alignContent="start">
+              <Heading as="h2" size="md" color="mainGreen" alignContent="start">
                 1. {`Introduction`}
               </Heading>
               <Text fontSize="xl" color="textGreyLight">
-                {`Last updated 02/21/2024`}
+                {`Last updated 06/28/2024`}
               </Text>
               <Text fontSize="xl" color="textGreyLight">
-                {`Welcome to Movie Mingle, a platform dedicated to enhancing language learning
+                {`Welcome to CyberCloud, a platform dedicated to enhancing language learning
                 through the use of movie and TV series subtitles.`}
               </Text>
             </VStack>
 
             <VStack spacing="16px" alignItems="flex-start">
-              <Heading as="h2" size="md" color="white" alignContent="start">
+              <Heading as="h2" size="md" color="mainGreen" alignContent="start">
                 2. {`Your Acceptance of this Agreement`}
               </Heading>
               <Text fontSize="xl" color="textGreyLight">
-                {`These terms of service are entered into by and between You and Movie Mingle platform, ("Platform," "we," "our," or "us"). The following terms and conditions, together with any documents they expressly incorporate by reference (collectively "Terms of Service"), govern your access to and use of www.Movie-Mingle.com, including any content, functionality, and services offered on or through www.Movie-Mingle.com (the "Website").`}
+                {`These terms of service are entered into by and between You and CyberCloud platform, ("Platform," "we," "our," or "us"). The following terms and conditions, together with any documents they expressly incorporate by reference (collectively "Terms of Service"), govern your access to and use of www.Movie-Mingle.com, including any content, functionality, and services offered on or through www.Movie-Mingle.com (the "Website").`}
               </Text>
               <Text fontSize="xl" color="textGreyLight">
                 {`Please read the Terms of Service carefully before you start to use the Website.`}
@@ -77,7 +77,7 @@ export const TermsPage = () => {
             </VStack>
 
             <VStack spacing="16px" alignItems="flex-start">
-              <Heading as="h2" size="md" color="white" alignContent="start">
+              <Heading as="h2" size="md" color="mainGreen" alignContent="start">
                 3. {`Updates to Terms of Service`}
               </Heading>
               <Text fontSize="xl" color="textGreyLight">
@@ -89,7 +89,7 @@ export const TermsPage = () => {
             </VStack>
 
             <VStack spacing="16px" alignItems="flex-start">
-              <Heading as="h2" size="md" color="white" alignContent="start">
+              <Heading as="h2" size="md" color="mainGreen" alignContent="start">
                 4. {`Your Responsibilities`}
               </Heading>
               <Text fontSize="xl" color="textGreyLight">
@@ -101,7 +101,7 @@ export const TermsPage = () => {
             </VStack>
 
             <VStack spacing="16px" alignItems="flex-start">
-              <Heading as="h2" size="md" color="white" alignContent="start">
+              <Heading as="h2" size="md" color="mainGreen" alignContent="start">
                 5. {`Prohibited Activities`}
               </Heading>
               <Text fontSize="xl" color="textGreyLight">
@@ -133,7 +133,7 @@ export const TermsPage = () => {
             </VStack>
 
             <VStack spacing="16px" alignItems="flex-start">
-              <Heading as="h2" size="md" color="white" alignContent="start">
+              <Heading as="h2" size="md" color="mainGreen" alignContent="start">
                 6. {`Intellectual Property Rights`}
               </Heading>
               <Text fontSize="xl" color="textGreyLight">
@@ -168,7 +168,7 @@ export const TermsPage = () => {
             </VStack>
 
             <VStack spacing="16px" alignItems="flex-start">
-              <Heading as="h2" size="md" color="white" alignContent="start">
+              <Heading as="h2" size="md" color="mainGreen" alignContent="start">
                 7. {`Our Rights`}
               </Heading>
               <Text fontSize="xl" color="textGreyLight">
@@ -177,7 +177,7 @@ export const TermsPage = () => {
             </VStack>
 
             <VStack spacing="16px" alignItems="flex-start">
-              <Heading as="h2" size="md" color="white" alignContent="start">
+              <Heading as="h2" size="md" color="mainGreen" alignContent="start">
                 8. {`Third-Party Links and Content`}
               </Heading>
               <Text fontSize="xl" color="textGreyLight">
@@ -186,7 +186,7 @@ export const TermsPage = () => {
             </VStack>
 
             <VStack spacing="16px" alignItems="flex-start">
-              <Heading as="h2" size="md" color="white" alignContent="start">
+              <Heading as="h2" size="md" color="mainGreen" alignContent="start">
                 9. {`Disclaimer of Warranties`}
               </Heading>
               <UnorderedList variant="unordered">
@@ -196,7 +196,7 @@ export const TermsPage = () => {
             </VStack>
 
             <VStack spacing="16px" alignItems="flex-start">
-              <Heading as="h2" size="md" color="white" alignContent="start">
+              <Heading as="h2" size="md" color="mainGreen" alignContent="start">
                 10. {`Limitation of Liability`}
               </Heading>
               <Text fontSize="xl" color="textGreyLight">
@@ -205,7 +205,7 @@ export const TermsPage = () => {
             </VStack>
 
             <VStack spacing="16px" alignItems="flex-start">
-              <Heading as="h2" size="md" color="white" alignContent="start">
+              <Heading as="h2" size="md" color="mainGreen" alignContent="start">
                 11. {`Privacy Policy`}
               </Heading>
               <Text fontSize="xl" color="textGreyLight">
@@ -214,7 +214,7 @@ export const TermsPage = () => {
             </VStack>
 
             <VStack spacing="16px" alignItems="flex-start">
-              <Heading as="h2" size="md" color="white" alignContent="start">
+              <Heading as="h2" size="md" color="mainGreen" alignContent="start">
                 12. {`Cookies`}
               </Heading>
               <Text fontSize="xl" color="textGreyLight">
@@ -226,7 +226,7 @@ export const TermsPage = () => {
             </VStack>
 
             <VStack spacing="16px" alignItems="flex-start">
-              <Heading as="h2" size="md" color="white" alignContent="start">
+              <Heading as="h2" size="md" color="mainGreen" alignContent="start">
                 13. {`Copyright Infringement`}
               </Heading>
               <Text fontSize="xl" color="textGreyLight">
@@ -247,7 +247,7 @@ export const TermsPage = () => {
             </VStack>
 
             <VStack spacing="16px" alignItems="flex-start">
-              <Heading as="h2" size="md" color="white" alignContent="start">
+              <Heading as="h2" size="md" color="mainGreen" alignContent="start">
                 14. {`Notice`}
               </Heading>
               <Text fontSize="xl" color="textGreyLight">
@@ -256,7 +256,7 @@ export const TermsPage = () => {
             </VStack>
 
             {/* <VStack spacing="16px" alignItems="flex-start">
-              <Heading as="h2" size="md" color="white" align="start">
+              <Heading as="h2" size="md" color="mainGreen" align="start">
                 15.  {`Contact Information`}
               </Heading>
               <Text fontSize="xl" color="textGreyLight">
