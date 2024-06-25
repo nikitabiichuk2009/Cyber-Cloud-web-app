@@ -1,6 +1,10 @@
 import { extendTheme } from '@chakra-ui/react'
-import { Button } from './button'
 import { colors } from './colors'
+import { Button } from './button'
+import { Link } from './link'
+import { Text } from './text'
+import { Tooltip } from './tooltip'
+import { Modal } from './modal'
 
 export const theme = extendTheme({
   fonts: {
@@ -17,6 +21,12 @@ export const theme = extendTheme({
     },
   },
   colors,
+  sizes: {
+    // '4xl': '930px',
+    container: {
+      '2xl': '1536px',
+    },
+  },
   // sizes: {
   //   "4xl": "930px",
   //   container: {
@@ -36,5 +46,9 @@ export const theme = extendTheme({
   // },
   components: {
     Button,
+    Link,
+    Text,
+    Tooltip,
+    Modal,
   },
 })

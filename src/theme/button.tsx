@@ -1,10 +1,18 @@
 export const Button = {
   baseStyle: {
-    fontWeight: 'bold',
-    borderRadius: '46px',
-    _focus: {
-      boxShadow: 'none',
-    },
+    fontWeight: 'semibold',
+    borderRadius: 'md',
+    color: 'mainGreen',
+    // backgroundColor: 'gray.800',
+    boxShadow: 'xl',
+    // background: 'gray.800',
+    // _focus: {
+    //   boxShadow: 'none',
+    // },
+    // _hover: {
+    //   boxShadow: '2xl',
+    //   // color: 'mainGreen',
+    // },
     // _focus: {
     //   boxShadow: '0 0 0 3px #ffffff',
     //   outline: '2px solid #ffffff',
@@ -40,134 +48,156 @@ export const Button = {
   // },
   variants: {
     solid: {
-      color: 'white',
-      bg: 'tealButton',
+      color: 'mainGreen',
+      background: 'gray.800',
       _active: {
-        bg: 'primaryActive',
+        background: 'gray.800',
+        transform: 'scale(0.98)',
       },
       _hover: {
-        bg: 'primaryHover',
-        boxShadow: '0 0 8px 0 rgba(81, 147, 251, 1)',
+        background: 'gray.800',
+        boxShadow: '2xl',
+        transform: 'scale(1.005)',
       },
     },
-
-    outline: {
-      color: 'tealButton',
-      bg: 'transparent',
-      borderColor: 'tealButton',
-      border: '2px',
-      _active: {
-        color: 'white',
-        bg: 'tealButton',
+    wallet: {
+      color: 'mainGreen',
+      background: 'gray.800',
+      '& span:first-of-type': {
+        'margin-inline-end': '12px',
       },
-      _hover: {
-        bg: 'transparent',
-        borderColor: 'primaryHover',
-        boxShadow: '0 0 8px 0 rgba(81, 147, 251, 1)',
-      },
-    },
-
-    link: {
-      fontWeight: 'normal',
-      bg: 'transparent',
-      color: 'tealButton',
-      _disabled: {
-        bg: 'transparent',
+      '& span:last-of-type': {
+        'margin-inline-start': 'auto',
       },
       _active: {
-        color: 'tealButton',
-      },
-      _focus: {
-        boxShadow: 'none',
-        outline: 'none',
+        background: 'gray.800',
+        transform: 'scale(0.98)',
       },
       _hover: {
-        color: 'white',
-        // outline: 'none',
-        textDecoration: 'none',
-        _disabled: {
-          bg: 'transparent',
-        },
+        background: 'gray.800',
+        boxShadow: '2xl',
+        transform: 'scale(1.005)',
       },
     },
 
-    noDecoration: {
-      fontWeight: 'normal',
-      bg: 'transparent',
-      color: 'tealButton',
-      _disabled: {
-        bg: 'transparent',
-      },
-      _active: {
-        color: 'white',
-      },
-      _focus: {
-        boxShadow: 'none',
-        outline: 'none',
-      },
-      _hover: {
-        // color: 'white',
-        // outline: 'none',
-        textDecoration: 'none',
-        _disabled: {
-          bg: 'transparent',
-        },
-      },
-    },
+    //   outline: {
+    //     color: 'tealButton',
+    //     bg: 'transparent',
+    //     borderColor: 'tealButton',
+    //     border: '2px',
+    //     _active: {
+    //       color: 'white',
+    //       bg: 'tealButton',
+    //     },
+    //     _hover: {
+    //       bg: 'transparent',
+    //       borderColor: 'primaryHover',
+    //       boxShadow: '0 0 8px 0 rgba(81, 147, 251, 1)',
+    //     },
+    //   },
 
-    input: {
-      fontSize: 'md',
-      fontWeight: 'normal',
-      color: 'textGrey',
-      justifyContent: 'flex-start',
-      px: '12px',
-      border: '2px solid',
-      borderRightRadius: '0',
-      borderTopLeftRadius: '6px',
-      borderBottomLeftRadius: '6px',
-      borderColor: 'tealButton',
-      background: 'white',
-      _hover: {
-        borderColor: 'tealButton',
-      },
-    },
+    //   link: {
+    //     fontWeight: 'normal',
+    //     bg: 'transparent',
+    //     color: 'tealButton',
+    //     _disabled: {
+    //       bg: 'transparent',
+    //     },
+    //     _active: {
+    //       color: 'tealButton',
+    //     },
+    //     _focus: {
+    //       boxShadow: 'none',
+    //       outline: 'none',
+    //     },
+    //     _hover: {
+    //       color: 'white',
+    //       // outline: 'none',
+    //       textDecoration: 'none',
+    //       _disabled: {
+    //         bg: 'transparent',
+    //       },
+    //     },
+    //   },
 
-    // warning: {
-    //   bg: 'warning',
-    //   color: '#ffffff',
-    // },
-    // activeLink: {
-    //   fontWeight: 'normal',
-    //   bg: 'transparent',
-    //   color: 'gray.79',
-    //   _disabled: {
-    //   bg: 'transparent',
+    //   noDecoration: {
+    //     fontWeight: 'normal',
+    //     bg: 'transparent',
+    //     color: 'tealButton',
+    //     _disabled: {
+    //       bg: 'transparent',
+    //     },
+    //     _active: {
+    //       color: 'white',
+    //     },
+    //     _focus: {
+    //       boxShadow: 'none',
+    //       outline: 'none',
+    //     },
+    //     _hover: {
+    //       // color: 'white',
+    //       // outline: 'none',
+    //       textDecoration: 'none',
+    //       _disabled: {
+    //         bg: 'transparent',
+    //       },
+    //     },
     //   },
-    //   _active: {
-    //   color: 'primary',
+
+    //   input: {
+    //     fontSize: 'md',
+    //     fontWeight: 'normal',
+    //     color: 'textGrey',
+    //     justifyContent: 'flex-start',
+    //     px: '12px',
+    //     border: '2px solid',
+    //     borderRightRadius: '0',
+    //     borderTopLeftRadius: '6px',
+    //     borderBottomLeftRadius: '6px',
+    //     borderColor: 'tealButton',
+    //     background: 'white',
+    //     _hover: {
+    //       borderColor: 'tealButton',
+    //     },
     //   },
-    //   _hover: {
-    //   color: 'gray.100',
-    //   },
-    //   _focus: {
-    //   boxShadow: 'none',
-    //   outline: 'none',
-    //   },
-    // },
-    // ghost: {
-    //   _active: {
-    //   bg: 'unset',
-    //   },
-    //   _hover: {
-    //   bg: 'unset',
-    //   },
-    //   _focus: {
-    //   boxShadow: 'unset',
-    //   outline: 'unset',
-    //   },
-    // },
+
+    //   // warning: {
+    //   //   bg: 'warning',
+    //   //   color: '#ffffff',
+    //   // },
+    //   // activeLink: {
+    //   //   fontWeight: 'normal',
+    //   //   bg: 'transparent',
+    //   //   color: 'gray.79',
+    //   //   _disabled: {
+    //   //   bg: 'transparent',
+    //   //   },
+    //   //   _active: {
+    //   //   color: 'primary',
+    //   //   },
+    //   //   _hover: {
+    //   //   color: 'gray.100',
+    //   //   },
+    //   //   _focus: {
+    //   //   boxShadow: 'none',
+    //   //   outline: 'none',
+    //   //   },
+    //   // },
+    //   // ghost: {
+    //   //   _active: {
+    //   //   bg: 'unset',
+    //   //   },
+    //   //   _hover: {
+    //   //   bg: 'unset',
+    //   //   },
+    //   //   _focus: {
+    //   //   boxShadow: 'unset',
+    //   //   outline: 'unset',
+    //   //   },
+    //   // },
   },
   defaultProps: {
-    variant: 'outline',
+    variant: 'solid',
+    size: 'lg',
   },
 }
