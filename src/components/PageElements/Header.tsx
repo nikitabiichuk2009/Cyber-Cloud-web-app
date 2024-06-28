@@ -2,6 +2,10 @@ import { Link as ReactRouterLink } from 'react-router-dom'
 
 import { Stack, Link, Container, Box, Button, Text, useDisclosure } from '@chakra-ui/react'
 import { ConnectWalletModal } from '../Modals/ConnectWalletModal'
+// import {
+//   // useUserContextState,
+//   // useUserContextStateDispatch,
+// } from '../../shared/contexts/user-context-provider'
 // import { isEmpty } from 'lodash'
 
 // import {
@@ -24,7 +28,7 @@ export const Header = () => {
   // const displayMenuItems = useBreakpointValue({ base: true, lg: false })
   // const buttonSize = useBreakpointValue({ base: 'md', md: 'lg' })
 
-  // const isNotLogIn = true //isEmpty(user) || !user?.isLanguagesSet
+  const isNotLogIn = true //isEmpty(user) || !user?.isLanguagesSet
 
   return (
     <Box as="header" maxW="100%" zIndex="10">
@@ -47,16 +51,26 @@ export const Header = () => {
               Cloud
             </Text>
           </Link>
-          <Button
-            size={{ base: 'md', md: 'lg' }}
-            fontSize={{ base: 'md', md: 'lg' }}
-            onClick={onOpen}
-          >
-            Connect Wallet
-          </Button>
+          {isNotLogIn ? (
+            <Button
+              size={{ base: 'md', md: 'lg' }}
+              fontSize={{ base: 'md', md: 'lg' }}
+              onClick={onOpen}
+            >
+              Connect Wallet
+            </Button>
+          ) : (
+            <Button
+              size={{ base: 'md', md: 'lg' }}
+              fontSize={{ base: 'md', md: 'lg' }}
+              // onClick={onLogout}
+            >
+              Log out
+            </Button>
+          )}
         </Stack>
       </Container>
-      <ConnectWalletModal isOpen={isOpen} onClose={onClose} />
+      <ConnectWalletModal isOpen={isOpen} onClose={onClose} onWalletLogin={''} />
     </Box>
   )
 }

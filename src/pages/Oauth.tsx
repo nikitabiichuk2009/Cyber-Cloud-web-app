@@ -1,18 +1,21 @@
+import { useState } from 'react'
 // import React from 'react'
 // import { useNavigate } from 'react-router-dom'
 
 import { Button, Text, Tooltip, useDisclosure, VStack } from '@chakra-ui/react'
-// import { APP_PATHS } from '../paths'
 import 'bootstrap-icons/font/bootstrap-icons.css'
+
+// import { APP_PATHS } from '../paths'
 import { CertificatesModal } from '../components/Modals/CertificatesModal'
-import { useState } from 'react'
+import { setDocumentTitle } from '../components/PageElements/helpers'
 
 export const Oauth = () => {
   // const navigate = useNavigate()
+  setDocumentTitle('Oauth')
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [certificatesInfo, setCertificatesInfo] = useState({})
+  const [certificatesInfo, setCertificatesInfo] = useState({ name: '' })
 
-  function openModal(data: object) {
+  function openModal(data: { name: string; expireDates?: number }) {
     setCertificatesInfo(data)
     onOpen()
   }
@@ -81,7 +84,7 @@ export const Oauth = () => {
       name: 'Apple',
     },
     {
-      leftIcon: <i className="bi bi-telegram"></i>,
+      leftIcon: <i className="bi bi-twitter-x"></i>,
       rightIcon: <i className="bi bi-plus"></i>,
       isConnect: false,
       isExpire: false,
@@ -141,9 +144,9 @@ export const Oauth = () => {
         textShadow="0px 0px 1px #040404"
         textAlign="center"
       >
-        {buttonList.map((button, index) => (
+        {buttonList.map((button, index: number) => (
           <Tooltip
-            key={index}
+            key={`${index}-tooltip`}
             label={
               !button.isConnect ? (
                 'Not connected'
@@ -162,7 +165,7 @@ export const Oauth = () => {
             // isOpen
           >
             <Button
-              key={index}
+              key={`${index}-button`}
               w={{ base: '160px', md: '200px' }}
               leftIcon={button.leftIcon}
               rightIcon={!button.isConnect && !button.isExpire ? button.rightIcon : undefined}

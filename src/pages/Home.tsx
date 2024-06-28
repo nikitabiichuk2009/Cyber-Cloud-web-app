@@ -2,10 +2,12 @@
 // import { useNavigate } from 'react-router-dom'
 
 import { Heading, Image, Text, VStack } from '@chakra-ui/react'
+import { setDocumentTitle } from '../components/PageElements/helpers'
 // import { APP_PATHS } from '../paths'
 
 export const HomePage = () => {
   // const navigate = useNavigate()
+  setDocumentTitle('')
 
   return (
     <VStack alignItems="center" gap={{ base: '10px', md: '30px' }}>

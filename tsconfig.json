@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    // "outDir": "./dist/",
+    // "noImplicitAny": true,
+    // "module": "es6",
+    // "jsx": "react",
     "target": "es5",
     "lib": [
       "dom",
@@ -18,7 +22,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    // "types": ["webpack-env"]
+    // "typeRoots": ["./node_modules/@types"]
   },
   "include": [
     "src"

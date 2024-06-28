@@ -13,12 +13,13 @@ import {
   UnorderedList,
   VStack,
 } from '@chakra-ui/react'
+import { setDocumentTitle } from '../components/PageElements/helpers'
 // import { Header } from 'components/PageElements/Header'
 // import { Footer } from 'components/PageElements/Footer'
 
 export const TermsPage = () => {
   // const { t } = useTranslation()
-  // setDocumentTitle(t('Terms and condition'))
+  setDocumentTitle('Terms and condition')
 
   return (
     <Flex direction="column" minH="100vh">
