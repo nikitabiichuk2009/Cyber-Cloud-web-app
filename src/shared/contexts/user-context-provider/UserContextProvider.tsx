@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useReducer, Dispatch } from 'react'
+import React, { useCallback, useEffect, useReducer, Dispatch, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQueryClient } from 'react-query'
 import { useDisclosure } from '@chakra-ui/react'
+import { jwtDecode } from 'jwt-decode'
 
 import { connectMetamask } from '../../../services/metamask/index'
 import { signMessage } from '../../../services/metamask/provider'
@@ -9,6 +10,8 @@ import { useWalletLoginMutation } from '../../mutations/sessions'
 
 import { WalletConnectService } from '../../../services/walletConnect'
 import { ConnectWalletModal } from '../../../components/Modals/ConnectWalletModal'
+import { AUTH_ISSUER } from '../../helpers/const'
+import { APP_PATHS } from '../../../paths'
 
 interface UserState {
   user: Record<string, any>
@@ -19,12 +22,25 @@ interface UserAction {
   payload: UserState
 }
 
+interface DecodedToken {
+  iss: string
+  aud: string
+  exp: number
+  userId: string
+  type: string
+  iat: number
+  permissions?: string[]
+  context?: any
+}
+
 const UserStateContext = React.createContext<UserState | undefined>(undefined)
 
 interface UserDispatchContextProps {
   updateUserContext: Dispatch<UserAction>
   onLogout: () => Promise<void>
   onOpenLoginModal: () => void
+  isUserLogIn: boolean
+  handleWalletLogIn: any
 }
 
 const UserDispatchContext = React.createContext<UserDispatchContextProps | undefined>(undefined)
@@ -46,6 +62,7 @@ interface UserContextProviderProps {
 
 export const UserContextProvider: React.FC<UserContextProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, { user: {} })
+  const [isUserLogIn, setIsUserLogIn] = useState(false)
 
   const {
     isOpen: isLoginModalOpen,
@@ -62,16 +79,44 @@ export const UserContextProvider: React.FC<UserContextProviderProps> = ({ childr
     localStorage.removeItem('AUTH_TOKEN')
     await queryCache.invalidateQueries()
     handleDispatch({ type: 'logout', payload: { user: {} } })
+    setIsUserLogIn(false)
   }, [handleDispatch])
+
   const handleOpenLoginModal = useCallback(() => {
     onOpenLogin()
   }, [onOpenLogin])
 
-  const handleWalletLogIn = async () => {
+  const checkAuthToken = () => {
+    const token = localStorage.getItem('AUTH_TOKEN')
+    if (token) {
+      const decodedToken: DecodedToken = jwtDecode(token)
+
+      if (
+        !decodedToken.exp ||
+        decodedToken.exp * 1000 < Date.now() ||
+        decodedToken.iss !== AUTH_ISSUER
+      ) {
+        handleLogout()
+      }
+
+      handleDispatch({
+        type: 'update',
+        payload: {
+          user: { userId: decodedToken.userId },
+        },
+      })
+      setIsUserLogIn(true)
+    } else {
+      handleLogout()
+      onOpenLogin()
+    }
+  }
+
+  const handleWalletLogIn = async (pageRedirect?: keyof typeof APP_PATHS) => {
     let signedMessage: { signature: string; digest: string } | undefined
     const walletConnect = new WalletConnectService({})
     await walletConnect.disconnect()
-    const message = 'Log in to CyberCloud'
+    const message = 'Log in to Cyber Cloud (P)'
     const expiresAt = Date.now() + 1 * 60 * 1000
     const dataSignObject = { expiresAt, payload: message }
     const dataSign = JSON.stringify(dataSignObject)
@@ -84,13 +129,6 @@ export const UserContextProvider: React.FC<UserContextProviderProps> = ({ childr
         signedMessage = await signMessage(window.ethereum, dataSign)
       } else {
         await walletConnect.connect()
-        // const { valid, result } = await walletConnect.signMessage(dataSign)
-        // if (valid) {
-        //   signedMessage = {
-        //     signature: result,
-        //     digest: dataSign,
-        //   }
-        // }
         const signedResult = await walletConnect.signMessage(dataSign)
         if (signedResult?.valid) {
           signedMessage = {
@@ -108,17 +146,18 @@ export const UserContextProvider: React.FC<UserContextProviderProps> = ({ childr
           localStorage.setItem('AUTH_TOKEN', token)
           await queryCache.refetchQueries()
           onCloseLogin()
+          checkAuthToken()
+          if (pageRedirect) {
+            navigate(APP_PATHS[pageRedirect])
+          }
         },
       })
     }
   }
 
   useEffect(() => {
-    if (!localStorage.getItem('AUTH_TOKEN')) {
-      handleLogout()
-      if (!isLoginModalOpen) onOpenLogin()
-    }
-  }, [isLoginModalOpen, handleLogout, onOpenLogin])
+    checkAuthToken()
+  }, [])
 
   return (
     <UserStateContext.Provider value={state}>
@@ -127,6 +166,8 @@ export const UserContextProvider: React.FC<UserContextProviderProps> = ({ childr
           updateUserContext: handleDispatch,
           onLogout: handleLogout,
           onOpenLoginModal: handleOpenLoginModal,
+          handleWalletLogIn: handleWalletLogIn,
+          isUserLogIn: isUserLogIn,
         }}
       >
         {children}

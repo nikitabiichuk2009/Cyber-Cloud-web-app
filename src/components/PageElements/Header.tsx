@@ -1,12 +1,24 @@
 import React from 'react'
-import { Link as ReactRouterLink } from 'react-router-dom'
+import { Link as ReactRouterLink, useNavigate } from 'react-router-dom'
 
-import { Stack, Link, Container, Box, Button, Text, useDisclosure } from '@chakra-ui/react'
+import {
+  Stack,
+  Link,
+  Container,
+  Box,
+  Button,
+  Text,
+  useDisclosure,
+  HStack,
+  VStack,
+} from '@chakra-ui/react'
 import { ConnectWalletModal } from '../Modals/ConnectWalletModal'
-// import {
-//   // useUserContextState,
-//   // useUserContextStateDispatch,
-// } from '../../shared/contexts/user-context-provider'
+import {
+  useUserContextState,
+  useUserContextStateDispatch,
+} from '../../shared/contexts/user-context-provider'
+import { APP_PATHS } from '../../paths'
+import { trimAddress } from '../../shared/helpers/trimAddress'
 // import { isEmpty } from 'lodash'
 
 // import {
@@ -22,14 +34,21 @@ import { ConnectWalletModal } from '../Modals/ConnectWalletModal'
 // import { LoginModal, RegistrationModal } from '../Modals'
 
 export const Header: React.FC = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  // const { user } = useUserContextState()
-  // const { onLogout } = useUserContextStateDispatch()
+  const {
+    isOpen: isLoginModalOpen,
+    onOpen: onOpenLogin,
+    onClose: onCloseLogin,
+  } = useDisclosure()
+  const { user } = useUserContextState()
+  const { onLogout, handleWalletLogIn, onOpenLoginModal, isUserLogIn } =
+    useUserContextStateDispatch()
+
+  const navigate = useNavigate()
 
   // const displayMenuItems = useBreakpointValue({ base: true, lg: false })
   // const buttonSize = useBreakpointValue({ base: 'md', md: 'lg' })
 
-  const isNotLogIn = true //isEmpty(user) || !user?.isLanguagesSet
+  const isOauthPage = location.pathname === '/connect'
 
   return (
     <Box as="header" maxW="100%" zIndex="10">
@@ -52,26 +71,48 @@ export const Header: React.FC = () => {
               Cloud
             </Text>
           </Link>
-          {isNotLogIn ? (
+          {!isUserLogIn ? (
             <Button
               size={{ base: 'md', md: 'lg' }}
               fontSize={{ base: 'md', md: 'lg' }}
-              onClick={onOpen}
+              onClick={onOpenLoginModal}
             >
               Connect Wallet
             </Button>
           ) : (
-            <Button
-              size={{ base: 'md', md: 'lg' }}
-              fontSize={{ base: 'md', md: 'lg' }}
-              // onClick={onLogout}
-            >
-              Log out
-            </Button>
+            <HStack gap="16px">
+              <VStack gap="4px">
+                <Text variant="h4">Wallet</Text>
+                <Text variant="h5" color="mainGreen">
+                  {trimAddress(user.userId)}
+                </Text>
+              </VStack>
+              {!isOauthPage && (
+                <Button
+                  size={{ base: 'md', md: 'lg' }}
+                  fontSize={{ base: 'md', md: 'lg' }}
+                  onClick={() => navigate(APP_PATHS.connect)}
+                >
+                  Connect Networks
+                </Button>
+              )}
+
+              <Button
+                size={{ base: 'md', md: 'lg' }}
+                fontSize={{ base: 'md', md: 'lg' }}
+                onClick={onLogout}
+              >
+                Log out
+              </Button>
+            </HStack>
           )}
         </Stack>
       </Container>
-      <ConnectWalletModal isOpen={isOpen} onClose={onClose} onWalletLogin={''} />
+      <ConnectWalletModal
+        isOpen={isLoginModalOpen}
+        onClose={onCloseLogin}
+        onWalletLogin={handleWalletLogIn}
+      />
     </Box>
   )
 }

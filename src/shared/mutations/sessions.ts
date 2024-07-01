@@ -8,7 +8,7 @@ interface WalletLoginData {
   signature: string
 }
 
-interface ApiResponse {
+interface CreateSessionByWalletResponse {
   token: string
 }
 
@@ -23,15 +23,13 @@ interface ApiError {
 }
 
 export const useWalletLoginMutation = (
-  options?: UseMutationOptions<ApiResponse, ApiError, WalletLoginData>
-): UseMutationResult<ApiResponse, ApiError, WalletLoginData> => {
+  options?: UseMutationOptions<CreateSessionByWalletResponse, ApiError, WalletLoginData>
+): UseMutationResult<CreateSessionByWalletResponse, ApiError, WalletLoginData> => {
   const toast = useToast()
 
-  return useMutation<ApiResponse, ApiError, WalletLoginData>(
-    async (data: WalletLoginData) => {
-      const response = await axios.post<ApiResponse>('/createSessionByWallet', data)
-      return response.data
-    },
+  return useMutation<CreateSessionByWalletResponse, ApiError, WalletLoginData>(
+    async (data: WalletLoginData) =>
+      await axios.post<string, CreateSessionByWalletResponse>('/createSessionByWallet', data),
     {
       onError: (error: ApiError) => {
         onApiError(error, toast)
@@ -40,22 +38,3 @@ export const useWalletLoginMutation = (
     }
   )
 }
-
-// import { useToast } from "@chakra-ui/react";
-// import { useMutation } from "react-query";
-// import { onApiError } from "../helpers/onApiError";
-
-// import axios from "../api/setup";
-
-// export const useWalletLoginMutation = (options) => {
-//     const toast = useToast();
-//     return useMutation(
-//       async (data) => axios.post("/createSessionByWallet", data),
-//       {
-//         onError: (error) => {
-//           onApiError(error, toast);
-//         },
-//         ...options,
-//       }
-//     );
-//   };

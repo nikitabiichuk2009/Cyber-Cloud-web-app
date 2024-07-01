@@ -17,6 +17,8 @@ const HTTP_ERROR_MESSAGES: { [key: number]: string } = {
 
 const DEFAULT_ERROR_MESSAGE = 'Something went wrong. Try again later'
 
+const wrongCredentialsErrors = ['CCI-7', 'CCI-8', 'CCI-9']
+
 const getMessage = (status: number, data: ErrorResponseData): string =>
   data?.error ?? data?.message ?? HTTP_ERROR_MESSAGES[status] ?? DEFAULT_ERROR_MESSAGE
 
@@ -26,12 +28,12 @@ axios.interceptors.response.use(
     if (error.response) {
       const { status, data } = error.response
       if (status === 401) {
-        // localStorage.removeItem("AUTH_TOKEN");
-        // if (data?.code === 'DSP-10') {
-        //   return Promise.reject({
-        //     message: 'Wrong credentials or user does not exist',
-        //   });
-        // }
+        localStorage.removeItem('AUTH_TOKEN')
+        if (data.code && wrongCredentialsErrors.includes(data.code)){
+          return Promise.reject({
+            message: 'Wrong credentials',
+          });
+        }
         return Promise.reject({
           message: getMessage(status, data),
           error: data,
