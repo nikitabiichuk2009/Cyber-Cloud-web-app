@@ -14,7 +14,7 @@
 
 ## Project based on React + Chakra-ui + TypeScript + Vite
 
-start
+start dev
 
 ```
 npm start
