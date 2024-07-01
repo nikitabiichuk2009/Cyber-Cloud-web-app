@@ -1,3 +1,4 @@
+import React from 'react'
 import { Link as ReactRouterLink } from 'react-router-dom'
 
 import { Stack, Link, Container, Box, Button, Text, useDisclosure } from '@chakra-ui/react'
@@ -20,7 +21,7 @@ import { ConnectWalletModal } from '../Modals/ConnectWalletModal'
 
 // import { LoginModal, RegistrationModal } from '../Modals'
 
-export const Header = () => {
+export const Header: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   // const { user } = useUserContextState()
   // const { onLogout } = useUserContextStateDispatch()

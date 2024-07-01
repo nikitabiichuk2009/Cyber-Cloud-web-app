@@ -64,10 +64,10 @@ export const Button = {
       color: 'mainGreen',
       background: 'gray.800',
       '& span:first-of-type': {
-        'margin-inline-end': '12px',
+        marginInlineEnd: '12px',
       },
       '& span:last-of-type': {
-        'margin-inline-start': 'auto',
+        marginInlineStart: 'auto',
       },
       _active: {
         background: 'gray.800',

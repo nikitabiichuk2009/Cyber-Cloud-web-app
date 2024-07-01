@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosResponse, AxiosRequestConfig } from 'axios'
+import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import { environment } from '../../environments'
 
 interface ErrorResponseData {
@@ -50,7 +50,7 @@ axios.interceptors.response.use(
 )
 
 axios.interceptors.request.use(
-  (config: AxiosRequestConfig) => {
+  (config: InternalAxiosRequestConfig) => {
     const url = new URL(environment.BACKEND_URL_SUFFIX, environment.BACKEND_URL)
     config.baseURL = url.href
     const token = localStorage.getItem('AUTH_TOKEN')

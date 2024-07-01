@@ -84,10 +84,17 @@ export const UserContextProvider: React.FC<UserContextProviderProps> = ({ childr
         signedMessage = await signMessage(window.ethereum, dataSign)
       } else {
         await walletConnect.connect()
-        const { valid, result } = await walletConnect.signMessage(dataSign)
-        if (valid) {
+        // const { valid, result } = await walletConnect.signMessage(dataSign)
+        // if (valid) {
+        //   signedMessage = {
+        //     signature: result,
+        //     digest: dataSign,
+        //   }
+        // }
+        const signedResult = await walletConnect.signMessage(dataSign)
+        if (signedResult?.valid) {
           signedMessage = {
-            signature: result,
+            signature: signedResult.result,
             digest: dataSign,
           }
         }

@@ -1,3 +1,4 @@
+import React from 'react'
 import { Outlet } from 'react-router-dom'
 import { Container, Flex } from '@chakra-ui/react'
 // import { isEmpty } from 'lodash'
@@ -7,7 +8,7 @@ import { Footer } from '../PageElements/Footer'
 
 // import { useUserContextState } from 'shared/contexts/user-context-provider'
 
-export const Layout = () => {
+export const Layout: React.FC = () => {
   //   const { user } = useUserContextState()
 
   //   const isNotLogIn = isEmpty(user)

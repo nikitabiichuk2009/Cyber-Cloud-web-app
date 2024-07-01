@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import {
   Button,
   Modal,
@@ -10,16 +10,16 @@ import {
   // ModalFooter,
   Image,
   VStack,
-} from '@chakra-ui/react'
+} from "@chakra-ui/react";
 
-import 'bootstrap-icons/font/bootstrap-icons.css'
-import { useNavigate } from 'react-router-dom'
-import { APP_PATHS } from '../../paths'
+import "bootstrap-icons/font/bootstrap-icons.css";
+import { useNavigate } from "react-router-dom";
+import { APP_PATHS } from "../../paths";
 
 interface ConnectWalletModalProps {
-  isOpen: boolean
-  onClose: () => void
-  onWalletLogin: any
+  isOpen: boolean;
+  onClose: () => void;
+  onWalletLogin: any;
 }
 
 export const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({
@@ -27,47 +27,47 @@ export const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({
   onClose,
   onWalletLogin,
 }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const wallets = [
     {
-      name: 'MetaMask',
-      icon: '/images/walletNetwork/MetaMask.svg',
+      name: "MetaMask",
+      icon: "/images/walletNetwork/MetaMask.svg",
       isDisabled: false,
       onClick: () => {
-        onWalletLogin()
-        navigate(APP_PATHS.connect)
+        onWalletLogin();
+        navigate(APP_PATHS.connect);
         // onClose()
       },
     },
     {
-      name: 'CoinBase Wallet',
-      icon: '/images/walletNetwork/Coin.svg',
+      name: "CoinBase Wallet",
+      icon: "/images/walletNetwork/Coin.svg",
       isDisabled: true,
       onClick: () => {
-        navigate(APP_PATHS.connect)
-        onClose()
+        navigate(APP_PATHS.connect);
+        onClose();
       },
     },
     {
-      name: 'WalletConnect',
-      icon: '/images/walletNetwork/Connect.svg',
+      name: "WalletConnect",
+      icon: "/images/walletNetwork/Connect.svg",
       isDisabled: true,
       onClick: () => {
-        navigate(APP_PATHS.connect)
-        onClose()
+        navigate(APP_PATHS.connect);
+        onClose();
       },
     },
     {
-      name: 'Keplr',
-      icon: '/images/walletNetwork/Connect2.png',
+      name: "Keplr",
+      icon: "/images/walletNetwork/Connect2.png",
       isDisabled: true,
       onClick: () => {
-        navigate(APP_PATHS.connect)
-        onClose()
+        navigate(APP_PATHS.connect);
+        onClose();
       },
     },
-  ]
+  ];
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -83,11 +83,13 @@ export const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({
                 key={index}
                 w="100%"
                 // leftIcon={wallet.icon}
-                leftIcon={<Image src={wallet.icon} alt={wallet.name} boxSize="32px" />}
+                leftIcon={
+                  <Image src={wallet.icon} alt={wallet.name} boxSize="32px" />
+                }
                 rightIcon={<i className="bi bi-chevron-right"></i>}
                 color="mainGreen"
-                size={{ base: 'md', md: 'lg' }}
-                fontSize={{ base: 'md', md: 'lg' }}
+                size={{ base: "md", md: "lg" }}
+                fontSize={{ base: "md", md: "lg" }}
                 boxShadow="xl"
                 isDisabled={wallet.isDisabled}
                 onClick={wallet.onClick}
@@ -99,5 +101,5 @@ export const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({
         </ModalBody>
       </ModalContent>
     </Modal>
-  )
-}
+  );
+};

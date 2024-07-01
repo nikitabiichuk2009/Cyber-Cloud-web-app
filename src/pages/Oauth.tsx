@@ -1,3 +1,4 @@
+// import React from "react";
 import { useState } from 'react'
 // import React from 'react'
 // import { useNavigate } from 'react-router-dom'
@@ -9,7 +10,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 import { CertificatesModal } from '../components/Modals/CertificatesModal'
 import { setDocumentTitle } from '../components/PageElements/helpers'
 
-export const Oauth = () => {
+export const Oauth: React.FC = () => {
   // const navigate = useNavigate()
   setDocumentTitle('Oauth')
   const { isOpen, onOpen, onClose } = useDisclosure()

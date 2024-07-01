@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import {
   Button,
   Modal,
@@ -13,16 +13,16 @@ import {
   Text,
   Box,
   // HStack,
-} from '@chakra-ui/react'
+} from "@chakra-ui/react";
 
-import 'bootstrap-icons/font/bootstrap-icons.css'
+import "bootstrap-icons/font/bootstrap-icons.css";
 // import { useNavigate } from 'react-router-dom'
 // import { APP_PATHS } from '../../paths'
 
 interface CertificatesModalProps {
-  isOpen: boolean
-  onClose: () => void
-  certificatesInfo: { name: string; expireDates?: number }
+  isOpen: boolean;
+  onClose: () => void;
+  certificatesInfo: { name: string; expireDates?: number };
 }
 
 export const CertificatesModal: React.FC<CertificatesModalProps> = ({
@@ -38,7 +38,7 @@ export const CertificatesModal: React.FC<CertificatesModalProps> = ({
           <Text variant="h3" color="gray.500" fontWeight="semibold">
             <Text as="span" variant="h3" color="mainGreen">
               {certificatesInfo.name}
-            </Text>{' '}
+            </Text>{" "}
             Certificates
           </Text>
         </ModalHeader>
@@ -47,10 +47,10 @@ export const CertificatesModal: React.FC<CertificatesModalProps> = ({
           <VStack gap="16px" alignItems="start">
             {!!certificatesInfo.expireDates && (
               <Text color="gray.500" size="lg" fontWeight="semibold">
-                Expires at{' '}
+                Expires at{" "}
                 <Text as="span" color="mainGreen" fontWeight="semibold">
                   {certificatesInfo.expireDates}
-                </Text>{' '}
+                </Text>{" "}
                 days
               </Text>
             )}
@@ -59,17 +59,19 @@ export const CertificatesModal: React.FC<CertificatesModalProps> = ({
                 Main info:
               </Text>
               <Text color="gray.500" size="lg" fontWeight="normal">
-                {' '}
-                SOME BASE DATA FROM CERTIFICATES{' '}
+                {" "}
+                SOME BASE DATA FROM CERTIFICATES{" "}
               </Text>
             </Box>
           </VStack>
         </ModalBody>
         <ModalFooter justifyContent="space-between">
-          <Button rightIcon={<i className="bi bi-download"></i>}>Download</Button>
+          <Button rightIcon={<i className="bi bi-download"></i>}>
+            Download
+          </Button>
           <Button onClick={onClose}>Close</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
-  )
-}
+  );
+};

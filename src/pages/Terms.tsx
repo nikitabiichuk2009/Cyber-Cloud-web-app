@@ -1,4 +1,4 @@
-// import React from 'react'
+import React from 'react'
 // import { useTranslation } from 'react-i18next'
 
 // import { setDocumentTitle } from 'components/PageElements/helpers'
@@ -17,7 +17,7 @@ import { setDocumentTitle } from '../components/PageElements/helpers'
 // import { Header } from 'components/PageElements/Header'
 // import { Footer } from 'components/PageElements/Footer'
 
-export const TermsPage = () => {
+export const TermsPage: React.FC = () => {
   // const { t } = useTranslation()
   setDocumentTitle('Terms and condition')
 

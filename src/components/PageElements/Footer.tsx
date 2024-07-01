@@ -1,8 +1,9 @@
+import React from 'react'
 import { Link as ReactRouterLink } from 'react-router-dom'
 
 import { Box, Link, Stack, Text } from '@chakra-ui/react'
 
-export const Footer = () => {
+export const Footer: React.FC = () => {
   return (
     <Box as="footer" alignSelf="normal" display="flex" justifyContent="center">
       <Stack

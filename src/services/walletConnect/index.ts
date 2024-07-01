@@ -1,19 +1,16 @@
 import WalletConnect from '@walletconnect/client'
 import QRCodeModal from '@walletconnect/qrcode-modal'
 import { convertUtf8ToHex } from '@walletconnect/utils'
-// import abi from 'erc-20-abi'
-// import { ethers } from 'ethers'
+import abi from 'erc-20-abi'
+import { ethers } from 'ethers'
 
-// import { apiGetGasPrices, apiGetAccountNonce } from '../helpers/api' // eslint-disable-line
+import {
+  apiGetGasPrices,
+  // apiGetAccountNonce
+} from '../helpers/api' // eslint-disable-line
 import { ETHEREUM } from '../helpers/chains'
-import {
-  // sanitizeHex,
-  verifySignature,
-} from '../helpers/utilities'
-import {
-  // convertAmountToRawNumber,
-  convertStringToHex,
-} from '../helpers/bignumber'
+import { sanitizeHex, verifySignature } from '../helpers/utilities'
+import { convertAmountToRawNumber, convertStringToHex } from '../helpers/bignumber'
 import { hashMessage } from 'ethers/lib/utils'
 
 interface WalletConnectServiceOptions {
@@ -22,23 +19,23 @@ interface WalletConnectServiceOptions {
   chainId?: number
 }
 
-// interface TransactionResult {
-//   success: boolean
-//   method?: string
-//   txHash?: string
-//   from?: string
-//   to?: string
-//   error?: any
-// }
+interface TransactionResult {
+  success: boolean
+  method?: string
+  txHash?: string
+  from?: string
+  to?: string
+  error?: any
+}
 
 export class WalletConnectService {
-  private bridge: string
-  private chainId: number
-  private accounts: string[]
-  private assets: any[]
-  private address: string
-  private provider: any
-  private connector: WalletConnect
+  bridge: string
+  chainId: number
+  accounts: string[]
+  assets: any[]
+  address: string
+  provider: any
+  connector: WalletConnect
 
   constructor({
     provider,
@@ -142,78 +139,76 @@ export class WalletConnectService {
     this.address = address
   }
 
-  // private async _prepareTransaction(to: string, data: string, decimals = 18): Promise<any> {
-  //   const { address } = this
-  //   const from = address
-  //   // const _nonce = await apiGetAccountNonce(address, chainId);
-  //   // const nonce = sanitizeHex(convertStringToHex(_nonce));
-  //   const gasPrices = await apiGetGasPrices()
-  //   const _gasPrice = gasPrices.slow.price
-  //   const gasPrice = sanitizeHex(
-  //     convertStringToHex(convertAmountToRawNumber(_gasPrice, Math.round(decimals / 2)))
-  //   )
-  //   const _gas = 30000
-  //   const gas = sanitizeHex(convertStringToHex(_gas))
-  //   console.log(gas)
-  //   console.log(gasPrice)
-  //   const tx = {
-  //     from,
-  //     to,
-  //     // nonce,
-  //     data,
-  //   }
-  //   return tx
-  // }
+  private async _prepareTransaction(to: string, data: string, decimals = 18): Promise<any> {
+    const { address } = this
+    const from = address
+    // const _nonce = await apiGetAccountNonce(address, chainId);
+    // const nonce = sanitizeHex(convertStringToHex(_nonce));
+    const gasPrices = await apiGetGasPrices()
+    const _gasPrice = gasPrices.slow.price
+    const gasPrice = sanitizeHex(
+      convertStringToHex(convertAmountToRawNumber(_gasPrice, Math.round(decimals / 2)))
+    )
+    const _gas = 30000
+    const gas = sanitizeHex(convertStringToHex(_gas))
+    console.log(gas)
+    console.log(gasPrice)
+    const tx = {
+      from,
+      to,
+      // nonce,
+      data,
+    }
+    return tx
+  }
 
-  // async sendTransaction(
-  //   tokenContract: string,
-  //   to: string,
-  //   amount: string,
-  //   decimals: number
-  // ): Promise<TransactionResult | undefined> {
-  //   const { connector, address } = this
-  //   const iprovider = new ethers.utils.Interface(abi)
-  //   const data = iprovider.encodeFunctionData('transfer', [
-  //     to,
-  //     ethers.utils.parseUnits(amount, decimals),
-  //   ])
-  //   if (!connector) {
-  //     console.log('No connector')
-  //     return
-  //     // {
-  //     //   success: false,
-  //     //   error: "No connector",
-  //     // }
-  //   }
-  //   const tx = await this._prepareTransaction(tokenContract, data, decimals)
-  //   try {
-  //     const result = await connector.sendTransaction(tx)
-  //     await this.provider.waitForTransaction(result)
-  //     return {
-  //       success: true,
-  //       method: 'eth_sendTransaction',
-  //       txHash: result,
-  //       from: address,
-  //       to,
-  //     }
-  //   } catch (error) {
-  //     return {
-  //       success: false,
-  //       error,
-  //     }
-  //   }
-  // }
+  async sendTransaction(
+    tokenContract: string,
+    to: string,
+    amount: string,
+    decimals: number
+  ): Promise<TransactionResult | undefined> {
+    const { connector, address } = this
+    const iprovider = new ethers.utils.Interface(abi)
+    const data = iprovider.encodeFunctionData('transfer', [
+      to,
+      ethers.utils.parseUnits(amount, decimals),
+    ])
+    if (!connector) {
+      console.log('No connector')
+      return
+      // {
+      //   success: false,
+      //   error: "No connector",
+      // }
+    }
+    const tx = await this._prepareTransaction(tokenContract, data, decimals)
+    try {
+      const result = await connector.sendTransaction(tx)
+      await this.provider.waitForTransaction(result)
+      return {
+        success: true,
+        method: 'eth_sendTransaction',
+        txHash: result,
+        from: address,
+        to,
+      }
+    } catch (error) {
+      return {
+        success: false,
+        error,
+      }
+    }
+  }
 
-  async signMessage(message: string): Promise<{ result: string; valid: boolean }> {
+  async signMessage(message: string): Promise<{ result: string; valid: boolean } | undefined> {
     const { connector, address, chainId } = this
     const hexMsg = convertUtf8ToHex(message)
     const msgParams = [hexMsg, address]
     try {
       if (!connector) {
-        return {
-          valid: false,
-          result: 'No connector',
-        }
+        console.log('No connector')
+        return
       }
       const result = await connector.signPersonalMessage(msgParams)
 
@@ -225,10 +220,6 @@ export class WalletConnectService {
       }
     } catch (error) {
       console.error(error)
-      return {
-        valid: false,
-        result: `{error}`,
-      }
     }
   }
 }
