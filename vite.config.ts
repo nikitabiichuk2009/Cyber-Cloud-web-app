@@ -48,6 +48,17 @@ export default defineConfig({
   //     ],
   //   },
   // },
+  build: {
+    outDir: 'dist',
+    sourcemap: true, // Generates source maps for easier debugging in production
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+        },
+      },
+    },
+  },
   server: {
     // port: 3000, //base 5173
     open: true,
