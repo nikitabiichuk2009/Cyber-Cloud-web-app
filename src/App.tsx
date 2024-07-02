@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import { APP_PATHS } from './paths'
 import { Layout } from './components/layout'
 import { HomePage } from './pages/Home'
@@ -13,7 +13,7 @@ const App: React.FC = () => {
         <Route path={APP_PATHS.home} element={<HomePage />} />
         <Route path={APP_PATHS.oauth} element={<Oauth />} />
         <Route path={APP_PATHS.termsAndConditions} element={<TermsPage />} />
-        {/* <Route path="*" element={<NotFound />} /> */}
+        <Route path="*" element={<Navigate to={APP_PATHS.home} />} />
       </Route>
     </Routes>
   )

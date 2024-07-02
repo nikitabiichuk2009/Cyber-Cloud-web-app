@@ -140,35 +140,36 @@ export const Oauth: React.FC = () => {
     const code = params.get('code') as string
 
     if (type === 'apple') {
-      console.log('apple Auth URL:', code)
+      // console.log('apple Auth URL:', code)
       setAppleAuthCallback(code)
     }
     if (type === 'discord') {
-      console.log('discord Auth URL:', code)
+      // console.log('discord Auth URL:', code)
       setDiscordAuthCallback(code)
     }
     if (type === 'facebook') {
-      console.log('facebook Auth URL:', code)
+      // console.log('facebook Auth URL:', code)
       setFacebookAuthCallback(code)
     }
     if (type === 'github') {
-      console.log('github Auth URL:', code)
+      // console.log('github Auth URL:', code)
       setGithubAuthCallback(code)
     }
     if (type === 'google') {
-      console.log('Google Auth URL:', code)
+      // console.log('Google Auth URL:', code)
       setGoogleAuthCallback(code)
     }
     if (type === 'linkedin') {
-      console.log('linkedin Auth URL:', code)
+      // console.log('linkedin Auth URL:', code)
       setLinkedInAuthCallback(code)
     }
     if (type === 'telegram') {
-      console.log('telegram Auth URL:', code)
-      setTelegramAuthCallback(code)
+      const tgAuthResult = window.location.hash.split('=')[1]
+      // console.log('telegram Auth URL:', tgAuthResult)
+      setTelegramAuthCallback(tgAuthResult)
     }
     if (type === 'twitter') {
-      console.log('twitter Auth URL:', code)
+      // console.log('twitter Auth URL:', code)
       setTwitterAuthCallback(code)
     }
   }, [])

@@ -17,7 +17,7 @@
 start dev
 
 ```
-npm start
+npm run start:dev
 ```
 
 build
@@ -29,5 +29,5 @@ npm run build
 start build
 
 ```
-npm run preview
+npm start
 ```

@@ -325,20 +325,20 @@ export const useLinkedInAuthCallback = (
 }
 
 export const useTelegramAuthCallback = (
-  code?: string | null,
+  tgAuthResult?: string | null,
   options?: any
 ): UseQueryResult<AuthUrlCallbackResponse, AxiosError> => {
   const toast = useToast()
   //   console.log('useGoogleAuthCallback- code', code)
 
   return useQuery<AuthUrlCallbackResponse, AxiosError>(
-    [QueriesKeysEnum.telegramAuthCallback, code],
+    [QueriesKeysEnum.telegramAuthCallback, tgAuthResult],
     async () => {
-      if (code) {
+      if (tgAuthResult) {
         const response = await axios.get<any, AuthUrlCallbackResponse>(
-          '/telegramInOAuthCallback',
+          '/telegramOAuthCallback',
           {
-            params: { code },
+            params: { tgAuthResult },
           }
         )
         return response
@@ -347,7 +347,7 @@ export const useTelegramAuthCallback = (
       }
     },
     {
-      enabled: !!code, // This ensures the query only runs if code is defined
+      enabled: !!tgAuthResult, // This ensures the query only runs if code is defined
       retry: false,
       onError: (error: AxiosError) => {
         toast({ position: 'top-right', status: 'error', title: error.message, isClosable: true })
@@ -368,12 +368,9 @@ export const useTwitterAuthCallback = (
     [QueriesKeysEnum.twitterAuthCallback, code],
     async () => {
       if (code) {
-        const response = await axios.get<any, AuthUrlCallbackResponse>(
-          '/twitterInOAuthCallback',
-          {
-            params: { code },
-          }
-        )
+        const response = await axios.get<any, AuthUrlCallbackResponse>('/twitterOAuthCallback', {
+          params: { code },
+        })
         return response
       } else {
         return Promise.reject(new Error('No code provided'))
