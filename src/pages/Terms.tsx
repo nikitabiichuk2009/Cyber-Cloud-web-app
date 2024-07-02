@@ -1,7 +1,5 @@
-// import React from 'react'
-// import { useTranslation } from 'react-i18next'
+import React from 'react'
 
-// import { setDocumentTitle } from 'components/PageElements/helpers'
 import {
   Box,
   Container,
@@ -13,16 +11,13 @@ import {
   UnorderedList,
   VStack,
 } from '@chakra-ui/react'
-// import { Header } from 'components/PageElements/Header'
-// import { Footer } from 'components/PageElements/Footer'
+import { setDocumentTitle } from '../components/PageElements/helpers'
 
-export const TermsPage = () => {
-  // const { t } = useTranslation()
-  // setDocumentTitle(t('Terms and condition'))
+export const TermsPage: React.FC = () => {
+  setDocumentTitle('Terms and condition')
 
   return (
     <Flex direction="column" minH="100vh">
-      {/* <Header /> */}
       <Container as="main" maxW="container.2xl" flex="1" p="16px 16px 20px 16px">
         <Box layerStyle="outline" py="32px" px="32px">
           <Heading as="h1" color="mainGreen" textAlign="center">
@@ -266,7 +261,6 @@ export const TermsPage = () => {
           </VStack>
         </Box>
       </Container>
-      {/* <Footer /> */}
     </Flex>
   )
 }

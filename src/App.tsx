@@ -11,7 +11,7 @@ const App: React.FC = () => {
     <Routes>
       <Route path={APP_PATHS.home} element={<Layout />}>
         <Route path={APP_PATHS.home} element={<HomePage />} />
-        <Route path={APP_PATHS.connect} element={<Oauth />} />
+        <Route path={APP_PATHS.oauth} element={<Oauth />} />
         <Route path={APP_PATHS.termsAndConditions} element={<TermsPage />} />
         {/* <Route path="*" element={<NotFound />} /> */}
       </Route>

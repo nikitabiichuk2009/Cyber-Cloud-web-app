@@ -5,17 +5,11 @@ export const Modal = {
       bg: 'mainBlack',
       px: '24px',
       py: '16px',
-      //   pb: '16px',
       borderRadius: '16px 16px 0 0',
-      //   alignSelf: 'center',
-      //   fontSize: '24',
-      //   fontWeight: 'bold',
     },
     dialog: {
       bg: 'mainBlack',
       borderRadius: '16px',
-      //   border: '1px solid',
-      //   borderColor: 'highliteLineGray',
     },
     closeButton: {
       top: '8px',
