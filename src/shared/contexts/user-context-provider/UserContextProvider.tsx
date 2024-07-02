@@ -120,8 +120,6 @@ export const UserContextProvider: React.FC<UserContextProviderProps> = ({ childr
     const expiresAt = Date.now() + 1 * 60 * 1000
     const dataSignObject = { expiresAt, payload: message }
     const dataSign = JSON.stringify(dataSignObject)
-    console.log(walletConnect)
-    console.log(dataSign)
 
     try {
       if (window.ethereum) {

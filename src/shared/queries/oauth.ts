@@ -266,7 +266,6 @@ export const useGoogleAuthCallback = (
   options?: any
 ): UseQueryResult<AuthUrlCallbackResponse, AxiosError> => {
   const toast = useToast()
-  //   console.log('useGoogleAuthCallback- code', code)
 
   return useQuery<AuthUrlCallbackResponse, AxiosError>(
     [QueriesKeysEnum.googleAuthCallback, code],
@@ -296,7 +295,6 @@ export const useLinkedInAuthCallback = (
   options?: any
 ): UseQueryResult<AuthUrlCallbackResponse, AxiosError> => {
   const toast = useToast()
-  //   console.log('useGoogleAuthCallback- code', code)
 
   return useQuery<AuthUrlCallbackResponse, AxiosError>(
     [QueriesKeysEnum.linkedInAuthCallback, code],
@@ -329,7 +327,6 @@ export const useTelegramAuthCallback = (
   options?: any
 ): UseQueryResult<AuthUrlCallbackResponse, AxiosError> => {
   const toast = useToast()
-  //   console.log('useGoogleAuthCallback- code', code)
 
   return useQuery<AuthUrlCallbackResponse, AxiosError>(
     [QueriesKeysEnum.telegramAuthCallback, tgAuthResult],
@@ -347,7 +344,7 @@ export const useTelegramAuthCallback = (
       }
     },
     {
-      enabled: !!tgAuthResult, // This ensures the query only runs if code is defined
+      enabled: !!tgAuthResult, // This ensures the query only runs if tgAuthResult is defined
       retry: false,
       onError: (error: AxiosError) => {
         toast({ position: 'top-right', status: 'error', title: error.message, isClosable: true })
@@ -362,7 +359,6 @@ export const useTwitterAuthCallback = (
   options?: any
 ): UseQueryResult<AuthUrlCallbackResponse, AxiosError> => {
   const toast = useToast()
-  //   console.log('useGoogleAuthCallback- code', code)
 
   return useQuery<AuthUrlCallbackResponse, AxiosError>(
     [QueriesKeysEnum.twitterAuthCallback, code],
