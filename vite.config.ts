@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
-// import inject from '@rollup/plugin-inject'
 
 export default defineConfig({
   plugins: [
@@ -28,29 +27,9 @@ export default defineConfig({
       protocolImports: true,
     }),
   ],
-  // optimizeDeps: {
-  //   esbuildOptions: {
-  //     // Node.js global to browser globalThis
-  //     define: {
-  //       global: 'globalThis',
-  //     },
-  //   },
-  // },
-  // build: {
-  //   rollupOptions: {
-  //     plugins: [
-  //       inject({
-  //         // Provide global variables to replace modules
-  //         // global: 'globalThis',
-  //         process: 'process',
-  //         Buffer: ['buffer', 'Buffer'],
-  //       }),
-  //     ],
-  //   },
-  // },
   build: {
     outDir: 'dist',
-    sourcemap: true, // Generates source maps for easier debugging in production
+    // sourcemap: true, // Generates source maps for easier debugging in production
     rollupOptions: {
       output: {
         manualChunks: {
@@ -60,15 +39,7 @@ export default defineConfig({
     },
   },
   server: {
-    // port: 3000, //base 5173
+    port: 3000, //base 5173
     open: true,
   },
 })
-
-// import { defineConfig } from 'vite'
-// import react from '@vitejs/plugin-react-swc'
-
-// // https://vitejs.dev/config/
-// export default defineConfig({
-//   plugins: [react()],
-// })

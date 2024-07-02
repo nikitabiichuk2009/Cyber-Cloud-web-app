@@ -1,12 +1,9 @@
 import React from 'react'
-// import { useNavigate } from 'react-router-dom'
 
 import { Heading, Image, Text, VStack } from '@chakra-ui/react'
 import { setDocumentTitle } from '../components/PageElements/helpers'
-// import { APP_PATHS } from '../paths'
 
 export const HomePage: React.FC = () => {
-  // const navigate = useNavigate()
   setDocumentTitle('')
 
   return (

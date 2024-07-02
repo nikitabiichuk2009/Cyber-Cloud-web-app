@@ -11,6 +11,7 @@ import {
   useDisclosure,
   HStack,
   VStack,
+  useBreakpointValue,
 } from '@chakra-ui/react'
 import { ConnectWalletModal } from '../Modals/ConnectWalletModal'
 import {
@@ -19,19 +20,6 @@ import {
 } from '../../shared/contexts/user-context-provider'
 import { APP_PATHS } from '../../paths'
 import { trimAddress } from '../../shared/helpers/trimAddress'
-// import { isEmpty } from 'lodash'
-
-// import {
-//   StyledNavLink,
-//   // LanguageSwitcher
-// } from './helpers'
-
-// import {
-//   useUserContextState,
-//   useUserContextStateDispatch,
-// } from 'shared/contexts/user-context-provider'
-
-// import { LoginModal, RegistrationModal } from '../Modals'
 
 export const Header: React.FC = () => {
   const {
@@ -45,17 +33,16 @@ export const Header: React.FC = () => {
 
   const navigate = useNavigate()
 
-  // const displayMenuItems = useBreakpointValue({ base: true, lg: false })
-  // const buttonSize = useBreakpointValue({ base: 'md', md: 'lg' })
+  const buttonSize = useBreakpointValue({ base: 'md', md: 'lg' })
+  const fontSize = useBreakpointValue({ base: 'md', md: 'lg' })
 
-  const isOauthPage = location.pathname === '/connect'
+  const isOauthPage = location.pathname === '/oauth'
 
   return (
     <Box as="header" maxW="100%" zIndex="10">
       <Container maxW="container.2xl" px={{ base: '8px', md: '16px' }}>
         <Stack
           height={{ base: '70px', sm: '100px' }}
-          // alignSelf="stretch"
           alignItems="center"
           direction="row"
           justify="space-between"
@@ -72,11 +59,7 @@ export const Header: React.FC = () => {
             </Text>
           </Link>
           {!isUserLogIn ? (
-            <Button
-              size={{ base: 'md', md: 'lg' }}
-              fontSize={{ base: 'md', md: 'lg' }}
-              onClick={onOpenLoginModal}
-            >
+            <Button size={buttonSize} fontSize={fontSize} onClick={onOpenLoginModal}>
               Connect Wallet
             </Button>
           ) : (
@@ -89,19 +72,15 @@ export const Header: React.FC = () => {
               </VStack>
               {!isOauthPage && (
                 <Button
-                  size={{ base: 'md', md: 'lg' }}
-                  fontSize={{ base: 'md', md: 'lg' }}
-                  onClick={() => navigate(APP_PATHS.connect)}
+                  size={buttonSize}
+                  fontSize={fontSize}
+                  onClick={() => navigate(APP_PATHS.oauth)}
                 >
                   Connect Networks
                 </Button>
               )}
 
-              <Button
-                size={{ base: 'md', md: 'lg' }}
-                fontSize={{ base: 'md', md: 'lg' }}
-                onClick={onLogout}
-              >
+              <Button size={buttonSize} fontSize={fontSize} onClick={onLogout}>
                 Log out
               </Button>
             </HStack>

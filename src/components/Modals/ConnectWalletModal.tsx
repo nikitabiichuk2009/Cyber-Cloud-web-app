@@ -1,4 +1,5 @@
 import React from 'react'
+// import { useNavigate } from 'react-router-dom'
 import {
   Button,
   Modal,
@@ -7,14 +8,12 @@ import {
   ModalHeader,
   ModalCloseButton,
   ModalBody,
-  // ModalFooter,
   Image,
   VStack,
 } from '@chakra-ui/react'
 
 import 'bootstrap-icons/font/bootstrap-icons.css'
-import { useNavigate } from 'react-router-dom'
-import { APP_PATHS } from '../../paths'
+// import { APP_PATHS } from '../../paths'
 
 interface ConnectWalletModalProps {
   isOpen: boolean
@@ -27,7 +26,7 @@ export const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({
   onClose,
   onWalletLogin,
 }) => {
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
 
   const wallets = [
     {
@@ -35,8 +34,8 @@ export const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({
       icon: '/images/walletNetwork/MetaMask.svg',
       isDisabled: false,
       onClick: () => {
-        onWalletLogin('connect')
-        // navigate(APP_PATHS.connect)
+        onWalletLogin('oauth')
+        // navigate(APP_PATHS.oauth)
         // onClose()
       },
     },
@@ -45,8 +44,8 @@ export const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({
       icon: '/images/walletNetwork/Coin.svg',
       isDisabled: true,
       onClick: () => {
-        navigate(APP_PATHS.connect)
-        onClose()
+        // navigate(APP_PATHS.oauth)
+        // onClose()
       },
     },
     {
@@ -54,8 +53,8 @@ export const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({
       icon: '/images/walletNetwork/Connect.svg',
       isDisabled: true,
       onClick: () => {
-        navigate(APP_PATHS.connect)
-        onClose()
+        // navigate(APP_PATHS.oauth)
+        // onClose()
       },
     },
     {
@@ -63,8 +62,8 @@ export const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({
       icon: '/images/walletNetwork/Connect2.png',
       isDisabled: true,
       onClick: () => {
-        navigate(APP_PATHS.connect)
-        onClose()
+        // navigate(APP_PATHS.oauth)
+        // onClose()
       },
     },
   ]

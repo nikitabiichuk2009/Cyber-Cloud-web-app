@@ -29,10 +29,10 @@ axios.interceptors.response.use(
       const { status, data } = error.response
       if (status === 401) {
         localStorage.removeItem('AUTH_TOKEN')
-        if (data.code && wrongCredentialsErrors.includes(data.code)){
+        if (data.code && wrongCredentialsErrors.includes(data.code)) {
           return Promise.reject({
             message: 'Wrong credentials',
-          });
+          })
         }
         return Promise.reject({
           message: getMessage(status, data),
@@ -57,7 +57,7 @@ axios.interceptors.request.use(
     config.baseURL = url.href
     const token = localStorage.getItem('AUTH_TOKEN')
     if (token && config.headers) {
-      config.headers['Authorization'] = `Bearer ${token}`
+      config.headers.auth = token
     }
     return config
   },
