@@ -89,8 +89,8 @@ export const CertificatesModal: React.FC<CertificatesModalProps> = ({
                 fontFamily="monospace"
                 w="100%"
                 children={
-                  certificatesInfo?.additionalInfo?.userInfo
-                    ? JSON.stringify(certificatesInfo.additionalInfo.userInfo, null, 2)
+                  certificatesInfo?.additionalInfo
+                    ? JSON.stringify(certificatesInfo.additionalInfo, null, 2)
                     : 'NO DATA FROM CERTIFICATES'
                 }
               />
