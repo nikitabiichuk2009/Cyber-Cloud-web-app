@@ -140,7 +140,8 @@ export const Oauth: React.FC = () => {
     const code = params.get('code') as string
 
     if (type === 'apple') {
-      setAppleAuthCallback(code)
+      const id_token = params.get('id_token') as string
+      setAppleAuthCallback(id_token)
     }
     if (type === 'discord') {
       setDiscordAuthCallback(code)

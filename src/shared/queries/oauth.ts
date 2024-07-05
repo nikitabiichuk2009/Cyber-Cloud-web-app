@@ -143,25 +143,25 @@ export const useTwitterAuth = (options?: any): UseQueryResult<AuthUrlResponse, A
 }
 
 export const useAppleAuthCallback = (
-  code?: string | null,
+  id_token?: string | null,
   options?: any
 ): UseQueryResult<AuthUrlCallbackResponse, AxiosError> => {
   const toast = useToast()
 
   return useQuery<AuthUrlCallbackResponse, AxiosError>(
-    [QueriesKeysEnum.appleAuthCallback, code],
+    [QueriesKeysEnum.appleAuthCallback, id_token],
     async () => {
-      if (code) {
+      if (id_token) {
         const response = await axios.get<any, AuthUrlCallbackResponse>('/appleOAuthCallback', {
-          params: { code },
+          params: { id_token },
         })
         return response
       } else {
-        return Promise.reject(new Error('No code provided'))
+        return Promise.reject(new Error('No id_token provided'))
       }
     },
     {
-      enabled: !!code, // This ensures the query only runs if code is defined
+      enabled: !!id_token, // This ensures the query only runs if id_token is defined
       retry: false,
       onError: (error: AxiosError) => {
         toast({ position: 'top-right', status: 'error', title: error.message, isClosable: true })
