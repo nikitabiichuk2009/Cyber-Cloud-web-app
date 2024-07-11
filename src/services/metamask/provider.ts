@@ -2,6 +2,7 @@ import { ethers } from 'ethers'
 import abi from 'erc-20-abi'
 import { convertStringToHex } from '../helpers/bignumber'
 import { ETHEREUM } from '../helpers/chains'
+import { connectRoninWallet } from '.'
 
 export const getProvider = async (
   provider: any,
@@ -45,4 +46,19 @@ export const signMessage = async (
     signature,
     digest: message,
   }
+}
+
+export const signRoninMessage = async (message: string) => {
+  const { signer } = await connectRoninWallet()
+  const signature = await signer.signMessage(message)
+  // return signature
+  return {
+    signature,
+    digest: message,
+  }
+}
+
+export const signRoninMessageVerify = async (digest: string, signature: string) => {
+  const walletAddress = ethers.utils.verifyMessage(digest, signature)
+  return walletAddress
 }

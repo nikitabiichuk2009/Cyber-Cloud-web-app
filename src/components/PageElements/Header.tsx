@@ -28,7 +28,7 @@ export const Header: React.FC = () => {
     onClose: onCloseLogin,
   } = useDisclosure()
   const { user } = useUserContextState()
-  const { onLogout, handleWalletLogIn, onOpenLoginModal, isUserLogIn } =
+  const { onLogout, handleWalletLogIn, handleRoninWalletLogIn, onOpenLoginModal, isUserLogIn } =
     useUserContextStateDispatch()
 
   const navigate = useNavigate()
@@ -91,6 +91,7 @@ export const Header: React.FC = () => {
         isOpen={isLoginModalOpen}
         onClose={onCloseLogin}
         onWalletLogin={handleWalletLogIn}
+        onRoninWalletLogin={handleRoninWalletLogIn}
       />
     </Box>
   )

@@ -4,8 +4,12 @@ import { useQueryClient } from 'react-query'
 import { useDisclosure } from '@chakra-ui/react'
 import { jwtDecode } from 'jwt-decode'
 
-import { connectMetamask } from '../../../services/metamask/index'
-import { signMessage } from '../../../services/metamask/provider'
+import { connectMetamask, connectRoninWallet } from '../../../services/metamask/index'
+import {
+  signMessage,
+  signRoninMessage,
+  signRoninMessageVerify,
+} from '../../../services/metamask/provider'
 import { useWalletLoginMutation } from '../../mutations/sessions'
 
 import { WalletConnectService } from '../../../services/walletConnect'
@@ -41,6 +45,7 @@ interface UserDispatchContextProps {
   onOpenLoginModal: () => void
   isUserLogIn: boolean
   handleWalletLogIn: any
+  handleRoninWalletLogIn: any
 }
 
 const UserDispatchContext = React.createContext<UserDispatchContextProps | undefined>(undefined)
@@ -153,6 +158,42 @@ export const UserContextProvider: React.FC<UserContextProviderProps> = ({ childr
     }
   }
 
+  const handleRoninWalletLogIn = async (pageRedirect?: keyof typeof APP_PATHS) => {
+    let signedMessage: { signature: string; digest: string } | undefined
+    const message = 'Log in to Cyber Cloud (P)'
+    const expiresAt = Date.now() + 1 * 60 * 1000
+    const dataSignObject = { expiresAt, payload: message }
+    const dataSign = JSON.stringify(dataSignObject)
+
+    try {
+      if (window.ronin) {
+        signedMessage = await signRoninMessage(dataSign)
+      } else {
+        window.alert('Please install Ronin Wallet')
+      }
+    } catch (e) {
+      console.log(e)
+    }
+    if (signedMessage) {
+      // For test
+      // console.log('signedMessage', signedMessage)
+      // const walletAddress = await signRoninMessageVerify(dataSign, signedMessage.signature)
+      // console.log('walletAddress', walletAddress)
+
+      await onWalletLogin(signedMessage, {
+        onSuccess: async ({ token }) => {
+          localStorage.setItem('AUTH_TOKEN', token)
+          await queryCache.refetchQueries()
+          onCloseLogin()
+          checkAuthToken()
+          if (pageRedirect) {
+            navigate(APP_PATHS[pageRedirect])
+          }
+        },
+      })
+    }
+  }
+
   useEffect(() => {
     checkAuthToken()
   }, [])
@@ -165,6 +206,7 @@ export const UserContextProvider: React.FC<UserContextProviderProps> = ({ childr
           onLogout: handleLogout,
           onOpenLoginModal: handleOpenLoginModal,
           handleWalletLogIn: handleWalletLogIn,
+          handleRoninWalletLogIn: handleRoninWalletLogIn,
           isUserLogIn: isUserLogIn,
         }}
       >
@@ -173,6 +215,7 @@ export const UserContextProvider: React.FC<UserContextProviderProps> = ({ childr
           isOpen={isLoginModalOpen}
           onClose={onCloseLogin}
           onWalletLogin={handleWalletLogIn}
+          onRoninWalletLogin={handleRoninWalletLogIn}
         />
       </UserDispatchContext.Provider>
     </UserStateContext.Provider>

@@ -19,12 +19,14 @@ interface ConnectWalletModalProps {
   isOpen: boolean
   onClose: () => void
   onWalletLogin: any
+  onRoninWalletLogin: any
 }
 
 export const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({
   isOpen,
   onClose,
   onWalletLogin,
+  onRoninWalletLogin,
 }) => {
   // const navigate = useNavigate()
 
@@ -64,6 +66,14 @@ export const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({
       onClick: () => {
         // navigate(APP_PATHS.oauth)
         // onClose()
+      },
+    },
+    {
+      name: 'Ronin',
+      icon: '/images/walletNetwork/Ronin.svg',
+      isDisabled: true,
+      onClick: () => {
+        onRoninWalletLogin('oauth')
       },
     },
   ]
