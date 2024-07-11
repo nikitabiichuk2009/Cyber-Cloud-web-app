@@ -245,7 +245,7 @@ export const Oauth: React.FC = () => {
     {
       leftIcon: <i className="bi bi-apple"></i>,
       rightIcon: <i className="bi bi-plus"></i>,
-      isDisabled: false,
+      isDisabled: true,
       name: 'Apple',
     },
     {
@@ -257,7 +257,7 @@ export const Oauth: React.FC = () => {
     {
       leftIcon: <i className="bi bi-facebook"></i>,
       rightIcon: <i className="bi bi-plus"></i>,
-      isDisabled: false,
+      isDisabled: true,
       name: 'Facebook',
     },
     {
@@ -275,7 +275,7 @@ export const Oauth: React.FC = () => {
     {
       leftIcon: <i className="bi bi-linkedin"></i>,
       rightIcon: <i className="bi bi-plus"></i>,
-      isDisabled: false,
+      isDisabled: true,
       name: 'LinkedIn',
     },
     {
@@ -287,7 +287,7 @@ export const Oauth: React.FC = () => {
     {
       leftIcon: <i className="bi bi-twitter-x"></i>,
       rightIcon: <i className="bi bi-plus"></i>,
-      isDisabled: false,
+      isDisabled: true,
       name: 'Twitter',
     },
   ]
