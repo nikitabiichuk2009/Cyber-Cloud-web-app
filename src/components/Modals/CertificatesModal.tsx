@@ -45,7 +45,7 @@ export const CertificatesModal: React.FC<CertificatesModalProps> = ({
   const currentDate = new Date()
   const expireDate = differenceInDays(certificatesInfo.expireDates, currentDate)
 
-  const hasCriteriaMessage =
+  const doesNotMeetCriteria =
     certificatesInfo.additionalInfo === 'You do not meet any Stamps criteria'
 
   return (
@@ -63,7 +63,7 @@ export const CertificatesModal: React.FC<CertificatesModalProps> = ({
         <ModalCloseButton />
         <ModalBody py="8px" minH="160px">
           <VStack gap="16px" alignItems="start">
-            {!hasCriteriaMessage && !!certificatesInfo.expireDates && expireDate > 0 && (
+            {!doesNotMeetCriteria && !!certificatesInfo.expireDates && expireDate > 0 && (
               <Text color="gray.500" size="lg" fontWeight="semibold">
                 Expires at{' '}
                 <Text as="span" color="mainGreen" fontWeight="semibold">
@@ -72,12 +72,12 @@ export const CertificatesModal: React.FC<CertificatesModalProps> = ({
                 days
               </Text>
             )}
-            {!hasCriteriaMessage && !!certificatesInfo.expireDates && expireDate <= 0 && (
+            {!doesNotMeetCriteria && !!certificatesInfo.expireDates && expireDate <= 0 && (
               <Text color="red.500" size="lg" fontWeight="bold">
                 Expired
               </Text>
             )}
-            {hasCriteriaMessage && (
+            {doesNotMeetCriteria && (
               <Text color="gray.500" size="lg" fontWeight="semibold">
                 No expiration date available
               </Text>
