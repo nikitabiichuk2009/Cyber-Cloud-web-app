@@ -3,12 +3,11 @@ import { useNavigate } from 'react-router-dom'
 
 import { Button, Spinner, Text, Tooltip, useDisclosure, VStack } from '@chakra-ui/react'
 import 'bootstrap-icons/font/bootstrap-icons.css'
-import { differenceInDays, addDays } from 'date-fns'
+import { differenceInDays } from 'date-fns'
 import { isNull } from 'lodash'
 
 import { setDocumentTitle } from '../components/PageElements/helpers'
 import { APP_PATHS } from '../paths'
-import { CERTIFICATE_VALID_PERIOD_DAYS } from '../shared/helpers/const'
 import { certificatesInfoProps, CertificatesModal } from '../components/Modals/CertificatesModal'
 import { jwtDecode } from 'jwt-decode'
 
@@ -91,7 +90,7 @@ export const Oauth: React.FC = () => {
       [key: string]: any
     }
 
-    let expireDates = addDays(currentDate, CERTIFICATE_VALID_PERIOD_DAYS)
+    let expireDates = new Date()
     let additionalInfo: any = 'You do not meet any Stamps criteria'
 
     if (authCallbackData.stamps.length > 0) {
@@ -113,7 +112,12 @@ export const Oauth: React.FC = () => {
       additionalInfo,
     }
 
-    localStorage.setItem(fullName, JSON.stringify(authCallbackInfo))
+    if (authCallbackData.stamps.length > 0) {
+      localStorage.setItem(fullName, JSON.stringify(authCallbackInfo))
+    } else {
+      setCertificatesInfo(authCallbackInfo)
+      onOpen()
+    }
 
     setAppleAuthCallback(null)
     setDiscordAuthCallback(null)
@@ -125,7 +129,9 @@ export const Oauth: React.FC = () => {
     setTwitterAuthCallback(null)
 
     navigate(APP_PATHS.oauth)
-    onNetworkClick(networkName)
+    if (authCallbackData.stamps.length > 0) {
+      onNetworkClick(networkName)
+    }
   }
 
   const handleWeb3Login = async () => {

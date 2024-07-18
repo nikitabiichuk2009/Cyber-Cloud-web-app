@@ -22,7 +22,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 export interface certificatesInfoProps {
   name: string
   expireDates: Date
-  additionalInfo?: { userInfo?: object; user?: object } | any
+  additionalInfo?: { decoded?: object; jwt?: object } | any
 }
 
 interface CertificatesModalProps {
@@ -45,6 +45,9 @@ export const CertificatesModal: React.FC<CertificatesModalProps> = ({
   const currentDate = new Date()
   const expireDate = differenceInDays(certificatesInfo.expireDates, currentDate)
 
+  const hasCriteriaMessage =
+    certificatesInfo.additionalInfo === 'You do not meet any Stamps criteria'
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} size={modalSize} isCentered>
       <ModalOverlay />
@@ -60,7 +63,7 @@ export const CertificatesModal: React.FC<CertificatesModalProps> = ({
         <ModalCloseButton />
         <ModalBody py="8px" minH="160px">
           <VStack gap="16px" alignItems="start">
-            {!!certificatesInfo.expireDates && expireDate > 0 && (
+            {!hasCriteriaMessage && !!certificatesInfo.expireDates && expireDate > 0 && (
               <Text color="gray.500" size="lg" fontWeight="semibold">
                 Expires at{' '}
                 <Text as="span" color="mainGreen" fontWeight="semibold">
@@ -69,9 +72,14 @@ export const CertificatesModal: React.FC<CertificatesModalProps> = ({
                 days
               </Text>
             )}
-            {!!certificatesInfo.expireDates && expireDate <= 0 && (
+            {!hasCriteriaMessage && !!certificatesInfo.expireDates && expireDate <= 0 && (
               <Text color="red.500" size="lg" fontWeight="bold">
                 Expired
+              </Text>
+            )}
+            {hasCriteriaMessage && (
+              <Text color="gray.500" size="lg" fontWeight="semibold">
+                No expiration date available
               </Text>
             )}
             <Box w="100%">
