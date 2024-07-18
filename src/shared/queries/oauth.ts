@@ -10,8 +10,7 @@ export interface AuthUrlResponse {
 }
 
 export interface AuthUrlCallbackResponse {
-  userInfo: object
-  user: object
+  stamps: string[]
 }
 
 export const useAppleAuth = (options?: any): UseQueryResult<AuthUrlResponse, AxiosError> => {
