@@ -10,6 +10,7 @@ import { setDocumentTitle } from '../components/PageElements/helpers'
 import { APP_PATHS } from '../paths'
 import { CERTIFICATE_VALID_PERIOD_DAYS } from '../shared/helpers/const'
 import { certificatesInfoProps, CertificatesModal } from '../components/Modals/CertificatesModal'
+import { jwtDecode } from 'jwt-decode'
 
 import {
   useAppleAuth,
@@ -29,11 +30,16 @@ import {
   useTwitterAuth,
   useTwitterAuthCallback,
 } from '../shared/queries/oauth'
+import { useWeb3StampsMutation } from '../shared/mutations/sessions'
+import { connectMetamask } from '../services/metamask'
+import { signMessage } from '../services/metamask/provider'
+import { WalletConnectService } from '../services/walletConnect'
 
 export const Oauth: React.FC = () => {
   setDocumentTitle('OAuth')
   const navigate = useNavigate()
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { mutate: onWeb3Login } = useWeb3StampsMutation()
   const currentDate = new Date()
   const [certificatesInfo, setCertificatesInfo] = useState({} as certificatesInfoProps)
 
@@ -72,15 +78,39 @@ export const Oauth: React.FC = () => {
   const { data: twitterAuthCallback, isLoading: isTwitterAuthCallbackLoading } =
     useTwitterAuthCallback(TwitterAuthCallback)
 
-  const saveAuthCallbackData = (networkName: string, authCallbackData: object) => {
+  const saveAuthCallbackData = (
+    networkName: string,
+    authCallbackData: {
+      stamps: string[]
+    }
+  ) => {
     const fullName = networkName.toUpperCase() + '_DATA'
 
-    const expireDates = addDays(currentDate, CERTIFICATE_VALID_PERIOD_DAYS)
+    interface DecodedToken {
+      exp?: number
+      [key: string]: any
+    }
+
+    let expireDates = addDays(currentDate, CERTIFICATE_VALID_PERIOD_DAYS)
+    let additionalInfo: any = 'You do not meet any Stamps criteria'
+
+    if (authCallbackData.stamps.length > 0) {
+      const decodedTokens = authCallbackData.stamps.map((stamp) => ({
+        decoded: jwtDecode<DecodedToken>(stamp),
+        jwt: stamp,
+      }))
+
+      const firstTokenData = decodedTokens[0]?.decoded
+      if (firstTokenData?.exp) {
+        expireDates = new Date(firstTokenData.exp * 1000) // Convert expiration time from seconds to milliseconds
+      }
+      additionalInfo = decodedTokens
+    }
 
     const authCallbackInfo = {
       name: networkName,
       expireDates,
-      additionalInfo: authCallbackData,
+      additionalInfo,
     }
 
     localStorage.setItem(fullName, JSON.stringify(authCallbackInfo))
@@ -96,6 +126,42 @@ export const Oauth: React.FC = () => {
 
     navigate(APP_PATHS.oauth)
     onNetworkClick(networkName)
+  }
+
+  const handleWeb3Login = async () => {
+    let signedMessage: { signature: string; digest: string } | undefined
+    const walletConnect = new WalletConnectService({})
+    await walletConnect.disconnect()
+    const message = 'Issue Web3 Stamps for Cyber Cloud (P)'
+    const expiresAt = Date.now() + 1 * 60 * 1000
+    const dataSignObject = { expiresAt, payload: message }
+    const dataSign = JSON.stringify(dataSignObject)
+
+    try {
+      if (window.ethereum) {
+        await connectMetamask(window.ethereum)
+        signedMessage = await signMessage(window.ethereum, dataSign)
+      } else {
+        await walletConnect.connect()
+        const signedResult = await walletConnect.signMessage(dataSign)
+        if (signedResult?.valid) {
+          signedMessage = {
+            signature: signedResult.result,
+            digest: dataSign,
+          }
+        }
+      }
+    } catch (e) {
+      console.log(e)
+    }
+
+    if (signedMessage) {
+      onWeb3Login(signedMessage, {
+        onSuccess: (data) => {
+          saveAuthCallbackData('Web3', data)
+        },
+      })
+    }
   }
 
   useEffect(() => {
@@ -238,6 +304,8 @@ export const Oauth: React.FC = () => {
       if (authUrl) {
         window.open(authUrl, '_self')
       }
+    } else if (networkName === 'Web3') {
+      handleWeb3Login()
     }
   }
 
@@ -289,6 +357,12 @@ export const Oauth: React.FC = () => {
       rightIcon: <i className="bi bi-plus"></i>,
       isDisabled: true,
       name: 'Twitter',
+    },
+    {
+      leftIcon: <img src="/images/web3.png" alt="web3 icon" width={32} height={32}></img>,
+      rightIcon: <i className="bi bi-plus"></i>,
+      isDisabled: false,
+      name: 'Web3',
     },
   ]
   //alignItems={{ base: 'start', md: 'center' }}

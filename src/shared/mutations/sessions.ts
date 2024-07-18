@@ -12,6 +12,10 @@ interface CreateSessionByWalletResponse {
   token: string
 }
 
+interface CreateWeb3StampsResponse {
+  stamps: string[]
+}
+
 interface ApiError {
   code: string
   message: string
@@ -30,6 +34,23 @@ export const useWalletLoginMutation = (
   return useMutation<CreateSessionByWalletResponse, ApiError, WalletLoginData>(
     async (data: WalletLoginData) =>
       await axios.post<string, CreateSessionByWalletResponse>('/createSessionByWallet', data),
+    {
+      onError: (error: ApiError) => {
+        onApiError(error, toast)
+      },
+      ...options,
+    }
+  )
+}
+
+export const useWeb3StampsMutation = (
+  options?: UseMutationOptions<CreateWeb3StampsResponse, ApiError, WalletLoginData>
+): UseMutationResult<CreateWeb3StampsResponse, ApiError, WalletLoginData> => {
+  const toast = useToast()
+
+  return useMutation<CreateWeb3StampsResponse, ApiError, WalletLoginData>(
+    async (data: WalletLoginData) =>
+      await axios.post<string, CreateWeb3StampsResponse>('/createWeb3Stamps', data),
     {
       onError: (error: ApiError) => {
         onApiError(error, toast)
