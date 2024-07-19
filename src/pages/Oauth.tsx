@@ -319,7 +319,7 @@ export const Oauth: React.FC = () => {
     {
       leftIcon: <i className="bi bi-apple"></i>,
       rightIcon: <i className="bi bi-plus"></i>,
-      isDisabled: true,
+      isDisabled: false,
       name: 'Apple',
     },
     {
@@ -331,7 +331,7 @@ export const Oauth: React.FC = () => {
     {
       leftIcon: <i className="bi bi-facebook"></i>,
       rightIcon: <i className="bi bi-plus"></i>,
-      isDisabled: true,
+      isDisabled: false,
       name: 'Facebook',
     },
     {
@@ -349,7 +349,7 @@ export const Oauth: React.FC = () => {
     {
       leftIcon: <i className="bi bi-linkedin"></i>,
       rightIcon: <i className="bi bi-plus"></i>,
-      isDisabled: true,
+      isDisabled: false,
       name: 'LinkedIn',
     },
     {
@@ -361,11 +361,22 @@ export const Oauth: React.FC = () => {
     {
       leftIcon: <i className="bi bi-twitter-x"></i>,
       rightIcon: <i className="bi bi-plus"></i>,
-      isDisabled: true,
+      isDisabled: false,
       name: 'Twitter',
     },
     {
-      leftIcon: <img src="/images/web3.png" alt="web3 icon" width={32} height={32}></img>,
+      leftIcon: (
+        <img
+          src="/images/web3.png"
+          alt="web3 icon"
+          width={32}
+          height={32}
+          style={{
+            filter:
+              'brightness(0) saturate(100%) invert(89%) sepia(19%) saturate(1011%) hue-rotate(18deg) brightness(104%) contrast(98%)',
+          }}
+        />
+      ),
       rightIcon: <i className="bi bi-plus"></i>,
       isDisabled: false,
       name: 'Web3',
