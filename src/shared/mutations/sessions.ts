@@ -14,6 +14,7 @@ interface CreateSessionByWalletResponse {
 
 interface CreateWeb3StampsResponse {
   stamps: string[]
+  attestationResponse: any
 }
 
 interface ApiError {
@@ -50,7 +51,10 @@ export const useWeb3StampsMutation = (
 
   return useMutation<CreateWeb3StampsResponse, ApiError, WalletLoginData>(
     async (data: WalletLoginData) =>
-      await axios.post<string, CreateWeb3StampsResponse>('/createWeb3Stamps', data),
+      await axios.post<string, CreateWeb3StampsResponse>(
+        '/createWeb3Stamps?privacy=only-me',
+        data
+      ),
     {
       onError: (error: ApiError) => {
         onApiError(error, toast)

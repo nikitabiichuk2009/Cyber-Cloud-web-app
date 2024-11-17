@@ -24,6 +24,8 @@ import {
   useGoogleAuthCallback,
   useLinkedInAuth,
   useLinkedInAuthCallback,
+  useRedditAuth,
+  useRedditAuthCallback,
   useTelegramAuth,
   useTelegramAuthCallback,
   useTwitterAuth,
@@ -50,7 +52,7 @@ export const Oauth: React.FC = () => {
   const [LinkedInAuthCallback, setLinkedInAuthCallback] = useState<string | null>(null)
   const [TelegramAuthCallback, setTelegramAuthCallback] = useState<string | null>(null)
   const [TwitterAuthCallback, setTwitterAuthCallback] = useState<string | null>(null)
-
+  const [RedditAuthCallback, setRedditAuthCallback] = useState<string | null>(null)
   const { data: appleAuth, isLoading: isAppleAuthLoading } = useAppleAuth()
   const { data: discordAuth, isLoading: isDiscordAuthLoading } = useDiscordAuth()
   const { data: facebookAuth, isLoading: isFacebookAuthLoading } = useFacebookAuth()
@@ -59,6 +61,7 @@ export const Oauth: React.FC = () => {
   const { data: linkedinAuth, isLoading: isLinkedInAuthLoading } = useLinkedInAuth()
   const { data: telegramAuth, isLoading: isTelegramAuthLoading } = useTelegramAuth()
   const { data: twitterAuth, isLoading: isTwitterAuthLoading } = useTwitterAuth()
+  const { data: redditAuth, isLoading: isRedditAuthLoading } = useRedditAuth()
 
   const { data: appleAuthCallback, isLoading: isAppleAuthCallbackLoading } =
     useAppleAuthCallback(AppleAuthCallback)
@@ -76,11 +79,14 @@ export const Oauth: React.FC = () => {
     useTelegramAuthCallback(TelegramAuthCallback)
   const { data: twitterAuthCallback, isLoading: isTwitterAuthCallbackLoading } =
     useTwitterAuthCallback(TwitterAuthCallback)
+  const { data: redditAuthCallback, isLoading: isRedditAuthCallbackLoading } =
+    useRedditAuthCallback(RedditAuthCallback)
 
   const saveAuthCallbackData = (
     networkName: string,
     authCallbackData: {
       stamps: string[]
+      attestationResponse: any
     }
   ) => {
     const fullName = networkName.toUpperCase() + '_DATA'
@@ -92,6 +98,8 @@ export const Oauth: React.FC = () => {
 
     let expireDates = new Date()
     let additionalInfo: any = 'You do not meet any Stamps criteria'
+
+    console.log('attestationResponse', authCallbackData.attestationResponse)
 
     if (authCallbackData.stamps.length > 0) {
       const decodedTokens = authCallbackData.stamps.map((stamp) => ({
@@ -127,7 +135,7 @@ export const Oauth: React.FC = () => {
     setLinkedInAuthCallback(null)
     setTelegramAuthCallback(null)
     setTwitterAuthCallback(null)
-
+    setRedditAuthCallback(null)
     navigate(APP_PATHS.oauth)
     if (authCallbackData.stamps.length > 0) {
       onNetworkClick(networkName)
@@ -195,6 +203,9 @@ export const Oauth: React.FC = () => {
     if (twitterAuthCallback && !isTwitterAuthCallbackLoading) {
       saveAuthCallbackData('Twitter', twitterAuthCallback)
     }
+    if (redditAuthCallback && !isRedditAuthCallbackLoading) {
+      saveAuthCallbackData('Reddit', redditAuthCallback)
+    }
   }, [
     appleAuthCallback,
     discordAuthCallback,
@@ -204,6 +215,7 @@ export const Oauth: React.FC = () => {
     linkedInAuthCallback,
     telegramAuthCallback,
     twitterAuthCallback,
+    redditAuthCallback,
   ])
 
   useEffect(() => {
@@ -237,6 +249,9 @@ export const Oauth: React.FC = () => {
     if (type === 'twitter') {
       setTwitterAuthCallback(code)
     }
+    if (type === 'reddit') {
+      setRedditAuthCallback(code)
+    }
   }, [])
 
   const isAuthUrlLoading =
@@ -265,8 +280,8 @@ export const Oauth: React.FC = () => {
     linkedin: { auth: linkedinAuth, loading: isLinkedInAuthLoading },
     telegram: { auth: telegramAuth, loading: isTelegramAuthLoading },
     twitter: { auth: twitterAuth, loading: isTwitterAuthLoading },
+    reddit: { auth: redditAuth, loading: isRedditAuthLoading },
   }
-
   const isCertificateExpire = (networkName: string) => {
     const fullName = networkName.toUpperCase() + '_DATA'
     const storageData = localStorage.getItem(fullName)
@@ -363,6 +378,12 @@ export const Oauth: React.FC = () => {
       rightIcon: <i className="bi bi-plus"></i>,
       isDisabled: false,
       name: 'Twitter',
+    },
+    {
+      leftIcon: <i className="bi bi-reddit"></i>,
+      rightIcon: <i className="bi bi-plus"></i>,
+      isDisabled: false,
+      name: 'Reddit',
     },
     {
       leftIcon: (

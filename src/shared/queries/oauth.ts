@@ -11,6 +11,23 @@ export interface AuthUrlResponse {
 
 export interface AuthUrlCallbackResponse {
   stamps: string[]
+  attestationResponse: any
+}
+
+const generateCodeVerifier = () => {
+  const array = new Uint32Array(56)
+  window.crypto.getRandomValues(array)
+  return Array.from(array, (dec) => ('0' + dec.toString(16)).substr(-2)).join('')
+}
+
+const generateCodeChallenge = async (codeVerifier: string) => {
+  const encoder = new TextEncoder()
+  const data = encoder.encode(codeVerifier)
+  const digest = await window.crypto.subtle.digest('SHA-256', data)
+  return btoa(String.fromCharCode(...new Uint8Array(digest)))
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '')
 }
 
 export const useAppleAuth = (options?: any): UseQueryResult<AuthUrlResponse, AxiosError> => {
@@ -34,11 +51,42 @@ export const useDiscordAuth = (options?: any): UseQueryResult<AuthUrlResponse, A
 
   return useQuery<AuthUrlResponse, AxiosError>(
     QueriesKeysEnum.discordAuth,
-    () => axios.get<any, AuthUrlResponse>('/discordAuthUrl'),
+    async () => {
+      let codeChallenge = ''
+
+      // Step 1: Check if a code verifier exists in localStorage
+      let codeVerifier = localStorage.getItem('discord_code_verifier')
+
+      if (!codeVerifier) {
+        // If not, generate a new code verifier and code challenge
+        codeVerifier = generateCodeVerifier()
+        codeChallenge = await generateCodeChallenge(codeVerifier)
+
+        // Store the code verifier in localStorage
+        localStorage.setItem('discord_code_verifier', codeVerifier)
+        console.log(`Generated Discord codeVerifier: ${codeVerifier}`)
+      } else {
+        // If it exists, generate the code challenge based on the existing code verifier
+        codeChallenge = await generateCodeChallenge(codeVerifier)
+        console.log(`Using existing Discord codeVerifier: ${codeVerifier}`)
+      }
+
+      // Step 2: Request OAuth URL with code challenge
+      const response = await axios.get<any, AuthUrlResponse>('/discordAuthUrl', {
+        params: { codeChallenge }, // Send the codeChallenge in the query parameters
+      })
+
+      return response
+    },
     {
       retry: false,
       onError: (error: AxiosError) => {
-        toast({ position: 'top-right', status: 'error', title: error.message, isClosable: true })
+        toast({
+          position: 'top-right',
+          status: 'error',
+          title: error.message,
+          isClosable: true,
+        })
       },
       ...options,
     }
@@ -50,11 +98,42 @@ export const useFacebookAuth = (options?: any): UseQueryResult<AuthUrlResponse, 
 
   return useQuery<AuthUrlResponse, AxiosError>(
     QueriesKeysEnum.facebookAuthUrl,
-    () => axios.get<any, AuthUrlResponse>('/facebookAuthUrl'),
+    async () => {
+      let codeChallenge = ''
+
+      // Step 1: Check if a code verifier exists in localStorage
+      let codeVerifier = localStorage.getItem('facebook_code_verifier')
+
+      if (!codeVerifier) {
+        // If not, generate a new code verifier and code challenge
+        codeVerifier = generateCodeVerifier()
+        codeChallenge = await generateCodeChallenge(codeVerifier)
+
+        // Store the code verifier in localStorage
+        localStorage.setItem('facebook_code_verifier', codeVerifier)
+        console.log(`Generated Facebook codeVerifier: ${codeVerifier}`)
+      } else {
+        // If it exists, generate the code challenge based on the existing code verifier
+        codeChallenge = await generateCodeChallenge(codeVerifier)
+        console.log(`Using existing Facebook codeVerifier: ${codeVerifier}`)
+      }
+
+      // Step 2: Request OAuth URL with code challenge
+      const response = await axios.get<any, AuthUrlResponse>('/facebookAuthUrl', {
+        params: { codeChallenge }, // Send the codeChallenge in the query parameters
+      })
+
+      return response
+    },
     {
       retry: false,
       onError: (error: AxiosError) => {
-        toast({ position: 'top-right', status: 'error', title: error.message, isClosable: true })
+        toast({
+          position: 'top-right',
+          status: 'error',
+          title: error.message,
+          isClosable: true,
+        })
       },
       ...options,
     }
@@ -82,11 +161,42 @@ export const useGoogleAuth = (options?: any): UseQueryResult<AuthUrlResponse, Ax
 
   return useQuery<AuthUrlResponse, AxiosError>(
     QueriesKeysEnum.googleAuth,
-    () => axios.get<any, AuthUrlResponse>('/googleAuthUrl'),
+    async () => {
+      let codeChallenge = ''
+
+      // Step 1: Check if a code verifier exists in localStorage
+      let codeVerifier = localStorage.getItem('google_code_verifier')
+
+      if (!codeVerifier) {
+        // If not, generate a new code verifier and code challenge
+        codeVerifier = generateCodeVerifier()
+        codeChallenge = await generateCodeChallenge(codeVerifier)
+
+        // Store the code verifier in localStorage
+        localStorage.setItem('google_code_verifier', codeVerifier)
+        console.log(`Generated codeVerifier: ${codeVerifier}`)
+      } else {
+        // If it exists, generate the code challenge based on the existing code verifier
+        codeChallenge = await generateCodeChallenge(codeVerifier)
+        console.log(`Using existing Google codeVerifier: ${codeVerifier}`)
+      }
+
+      // Step 2: Request OAuth URL with code challenge
+      const response = await axios.get<any, AuthUrlResponse>('/googleAuthUrl', {
+        params: { codeChallenge }, // Send the codeChallenge in the body as required
+      })
+
+      return response
+    },
     {
       retry: false,
       onError: (error: AxiosError) => {
-        toast({ position: 'top-right', status: 'error', title: error.message, isClosable: true })
+        toast({
+          position: 'top-right',
+          status: 'error',
+          title: error.message,
+          isClosable: true,
+        })
       },
       ...options,
     }
@@ -130,11 +240,42 @@ export const useTwitterAuth = (options?: any): UseQueryResult<AuthUrlResponse, A
 
   return useQuery<AuthUrlResponse, AxiosError>(
     QueriesKeysEnum.twitterAuth,
-    () => axios.get<any, AuthUrlResponse>('/twitterAuthUrl'),
+    async () => {
+      let codeChallenge = ''
+
+      // Step 1: Check if a code verifier exists in localStorage
+      let codeVerifier = localStorage.getItem('twitter_code_verifier')
+
+      if (!codeVerifier) {
+        // If not, generate a new code verifier and code challenge
+        codeVerifier = generateCodeVerifier()
+        codeChallenge = await generateCodeChallenge(codeVerifier)
+
+        // Store the code verifier in localStorage
+        localStorage.setItem('twitter_code_verifier', codeVerifier)
+        console.log(`Generated Twitter codeVerifier: ${codeVerifier}`)
+      } else {
+        // If it exists, generate the code challenge based on the existing code verifier
+        codeChallenge = await generateCodeChallenge(codeVerifier)
+        console.log(`Using existing Twitter codeVerifier: ${codeVerifier}`)
+      }
+
+      // Step 2: Request OAuth URL with code challenge
+      const response = await axios.get<any, AuthUrlResponse>('/twitterAuthUrl', {
+        params: { codeChallenge }, // Send the codeChallenge in the query parameters
+      })
+
+      return response
+    },
     {
       retry: false,
       onError: (error: AxiosError) => {
-        toast({ position: 'top-right', status: 'error', title: error.message, isClosable: true })
+        toast({
+          position: 'top-right',
+          status: 'error',
+          title: error.message,
+          isClosable: true,
+        })
       },
       ...options,
     }
@@ -152,7 +293,7 @@ export const useAppleAuthCallback = (
     async () => {
       if (id_token) {
         const response = await axios.get<any, AuthUrlCallbackResponse>('/appleOAuthCallback', {
-          params: { id_token },
+          params: { id_token, privacy: 'only-me' },
         })
         return response
       } else {
@@ -180,19 +321,39 @@ export const useDiscordAuthCallback = (
     [QueriesKeysEnum.discordAuthCallback, code],
     async () => {
       if (code) {
+        // Retrieve codeVerifier from localStorage
+        const codeVerifier = localStorage.getItem('discord_code_verifier')
+        if (!codeVerifier) {
+          throw new Error('Missing Discord codeVerifier')
+        }
+
+        // Send code and codeVerifier to backend for token exchange
         const response = await axios.get<any, AuthUrlCallbackResponse>('/discordOAuthCallback', {
-          params: { code },
+          params: {
+            code,
+            codeVerifier,
+            privacy: 'only-me',
+          },
         })
+
+        // Clear the codeVerifier after it has been used
+        localStorage.removeItem('discord_code_verifier')
+
         return response
       } else {
         return Promise.reject(new Error('No code provided'))
       }
     },
     {
-      enabled: !!code, // This ensures the query only runs if code is defined
+      enabled: !!code, // Only run the query if the code is defined
       retry: false,
       onError: (error: AxiosError) => {
-        toast({ position: 'top-right', status: 'error', title: error.message, isClosable: true })
+        toast({
+          position: 'top-right',
+          status: 'error',
+          title: error.message,
+          isClosable: true,
+        })
       },
       ...options,
     }
@@ -209,22 +370,42 @@ export const useFacebookAuthCallback = (
     [QueriesKeysEnum.facebookAuthUrlCallback, code],
     async () => {
       if (code) {
+        // Step 1: Retrieve codeVerifier from localStorage
+        const codeVerifier = localStorage.getItem('facebook_code_verifier')
+        if (!codeVerifier) {
+          throw new Error('Missing Facebook codeVerifier')
+        }
+
+        // Step 2: Send code and codeVerifier to backend for token exchange
         const response = await axios.get<any, AuthUrlCallbackResponse>(
           '/facebookOAuthCallback',
           {
-            params: { code },
+            params: {
+              code,
+              codeVerifier,
+              privacy: 'only-me',
+            },
           }
         )
+
+        // Clear the codeVerifier after it has been used
+        localStorage.removeItem('facebook_code_verifier')
+
         return response
       } else {
         return Promise.reject(new Error('No code provided'))
       }
     },
     {
-      enabled: !!code, // This ensures the query only runs if code is defined
+      enabled: !!code, // Only run the query if the code is defined
       retry: false,
       onError: (error: AxiosError) => {
-        toast({ position: 'top-right', status: 'error', title: error.message, isClosable: true })
+        toast({
+          position: 'top-right',
+          status: 'error',
+          title: error.message,
+          isClosable: true,
+        })
       },
       ...options,
     }
@@ -242,7 +423,7 @@ export const useGithubAuthCallback = (
     async () => {
       if (code) {
         const response = await axios.get<any, AuthUrlCallbackResponse>('/githubOAuthCallback', {
-          params: { code },
+          params: { code, privacy: 'only-me' },
         })
         return response
       } else {
@@ -270,8 +451,19 @@ export const useGoogleAuthCallback = (
     [QueriesKeysEnum.googleAuthCallback, code],
     async () => {
       if (code) {
+        // Retrieve codeVerifier from localStorage
+        const codeVerifier = localStorage.getItem('google_code_verifier')
+        if (!codeVerifier) {
+          throw new Error('Missing codeVerifier')
+        }
+
+        // Send code and codeVerifier to backend for token exchange
         const response = await axios.get<any, AuthUrlCallbackResponse>('/googleOAuthCallback', {
-          params: { code },
+          params: {
+            code,
+            codeVerifier,
+            privacy: 'only-me',
+          },
         })
         return response
       } else {
@@ -302,7 +494,7 @@ export const useLinkedInAuthCallback = (
         const response = await axios.get<any, AuthUrlCallbackResponse>(
           '/linkedInOAuthCallback',
           {
-            params: { code },
+            params: { code, privacy: 'only-me' },
           }
         )
         return response
@@ -334,7 +526,7 @@ export const useTelegramAuthCallback = (
         const response = await axios.get<any, AuthUrlCallbackResponse>(
           '/telegramOAuthCallback',
           {
-            params: { tgAuthResult },
+            params: { tgAuthResult, privacy: 'only-me' },
           }
         )
         return response
@@ -363,19 +555,137 @@ export const useTwitterAuthCallback = (
     [QueriesKeysEnum.twitterAuthCallback, code],
     async () => {
       if (code) {
+        // Step 1: Retrieve codeVerifier from localStorage
+        const codeVerifier = localStorage.getItem('twitter_code_verifier')
+        if (!codeVerifier) {
+          throw new Error('Missing Twitter codeVerifier')
+        }
+
+        // Step 2: Send code and codeVerifier to backend for token exchange
         const response = await axios.get<any, AuthUrlCallbackResponse>('/twitterOAuthCallback', {
-          params: { code },
+          params: {
+            code,
+            codeVerifier, // Include the codeVerifier
+            privacy: 'only-me',
+          },
         })
+
+        // Clear the codeVerifier after it has been used
+        localStorage.removeItem('twitter_code_verifier')
+
         return response
       } else {
         return Promise.reject(new Error('No code provided'))
       }
     },
     {
-      enabled: !!code, // This ensures the query only runs if code is defined
+      enabled: !!code, // Only run the query if the code is defined
       retry: false,
       onError: (error: AxiosError) => {
-        toast({ position: 'top-right', status: 'error', title: error.message, isClosable: true })
+        toast({
+          position: 'top-right',
+          status: 'error',
+          title: error.message,
+          isClosable: true,
+        })
+      },
+      ...options,
+    }
+  )
+}
+
+// ... existing imports and code ...
+
+export const useRedditAuth = (options?: any): UseQueryResult<AuthUrlResponse, AxiosError> => {
+  const toast = useToast()
+
+  return useQuery<AuthUrlResponse, AxiosError>(
+    QueriesKeysEnum.redditAuth,
+    async () => {
+      let codeChallenge = ''
+
+      // Step 1: Check if a code verifier exists in localStorage
+      let codeVerifier = localStorage.getItem('reddit_code_verifier')
+
+      if (!codeVerifier) {
+        // If not, generate a new code verifier and code challenge
+        codeVerifier = generateCodeVerifier()
+        codeChallenge = await generateCodeChallenge(codeVerifier)
+
+        // Store the code verifier in localStorage
+        localStorage.setItem('reddit_code_verifier', codeVerifier)
+        console.log(`Generated Reddit codeVerifier: ${codeVerifier}`)
+      } else {
+        // If it exists, generate the code challenge based on the existing code verifier
+        codeChallenge = await generateCodeChallenge(codeVerifier)
+        console.log(`Using existing Reddit codeVerifier: ${codeVerifier}`)
+      }
+
+      // Step 2: Request OAuth URL with code challenge
+      const response = await axios.get<any, AuthUrlResponse>('/redditAuthUrl', {
+        params: { codeChallenge },
+      })
+
+      return response
+    },
+    {
+      retry: false,
+      onError: (error: AxiosError) => {
+        toast({
+          position: 'top-right',
+          status: 'error',
+          title: error.message,
+          isClosable: true,
+        })
+      },
+      ...options,
+    }
+  )
+}
+
+export const useRedditAuthCallback = (
+  code?: string | null,
+  options?: any
+): UseQueryResult<AuthUrlCallbackResponse, AxiosError> => {
+  const toast = useToast()
+
+  return useQuery<AuthUrlCallbackResponse, AxiosError>(
+    [QueriesKeysEnum.redditAuthCallback, code],
+    async () => {
+      if (code) {
+        // Step 1: Retrieve codeVerifier from localStorage
+        const codeVerifier = localStorage.getItem('reddit_code_verifier')
+        if (!codeVerifier) {
+          throw new Error('Missing Reddit codeVerifier')
+        }
+
+        // Step 2: Send code and codeVerifier to backend for token exchange
+        const response = await axios.get<any, AuthUrlCallbackResponse>('/redditOAuthCallback', {
+          params: {
+            code,
+            codeVerifier,
+            privacy: 'only-me',
+          },
+        })
+
+        // Clear the codeVerifier after it has been used
+        localStorage.removeItem('reddit_code_verifier')
+
+        return response
+      } else {
+        return Promise.reject(new Error('No code provided'))
+      }
+    },
+    {
+      enabled: !!code,
+      retry: false,
+      onError: (error: AxiosError) => {
+        toast({
+          position: 'top-right',
+          status: 'error',
+          title: error.message,
+          isClosable: true,
+        })
       },
       ...options,
     }
