@@ -1,6 +1,8 @@
 export const enum QueriesKeysEnum {
   appleAuth = 'appleAuth',
   appleAuthCallback = 'appleAuthCallback',
+  coinbaseAuth = 'coinbaseAuth',
+  coinbaseAuthCallback = 'coinbaseAuthCallback',
   discordAuth = 'discordAuth',
   discordAuthCallback = 'discordAuthCallback',
   facebookAuthUrl = 'facebookAuthUrl',

@@ -30,6 +30,8 @@ import {
   useTelegramAuthCallback,
   useTwitterAuth,
   useTwitterAuthCallback,
+  useCoinbaseAuth,
+  useCoinbaseAuthCallback,
 } from '../shared/queries/oauth'
 import { useWeb3StampsMutation } from '../shared/mutations/sessions'
 import { connectMetamask } from '../services/metamask'
@@ -53,6 +55,7 @@ export const Oauth: React.FC = () => {
   const [TelegramAuthCallback, setTelegramAuthCallback] = useState<string | null>(null)
   const [TwitterAuthCallback, setTwitterAuthCallback] = useState<string | null>(null)
   const [RedditAuthCallback, setRedditAuthCallback] = useState<string | null>(null)
+  const [CoinbaseAuthCallback, setCoinbaseAuthCallback] = useState<string | null>(null)
   const { data: appleAuth, isLoading: isAppleAuthLoading } = useAppleAuth()
   const { data: discordAuth, isLoading: isDiscordAuthLoading } = useDiscordAuth()
   const { data: facebookAuth, isLoading: isFacebookAuthLoading } = useFacebookAuth()
@@ -62,7 +65,7 @@ export const Oauth: React.FC = () => {
   const { data: telegramAuth, isLoading: isTelegramAuthLoading } = useTelegramAuth()
   const { data: twitterAuth, isLoading: isTwitterAuthLoading } = useTwitterAuth()
   const { data: redditAuth, isLoading: isRedditAuthLoading } = useRedditAuth()
-
+  const { data: coinbaseAuth, isLoading: isCoinbaseAuthLoading } = useCoinbaseAuth()
   const { data: appleAuthCallback, isLoading: isAppleAuthCallbackLoading } =
     useAppleAuthCallback(AppleAuthCallback)
   const { data: discordAuthCallback, isLoading: isDiscordAuthCallbackLoading } =
@@ -81,6 +84,8 @@ export const Oauth: React.FC = () => {
     useTwitterAuthCallback(TwitterAuthCallback)
   const { data: redditAuthCallback, isLoading: isRedditAuthCallbackLoading } =
     useRedditAuthCallback(RedditAuthCallback)
+  const { data: coinbaseAuthCallback, isLoading: isCoinbaseAuthCallbackLoading } =
+    useCoinbaseAuthCallback(CoinbaseAuthCallback)
 
   const saveAuthCallbackData = (
     networkName: string,
@@ -99,7 +104,7 @@ export const Oauth: React.FC = () => {
     let expireDates = new Date()
     let additionalInfo: any = 'You do not meet any Stamps criteria'
 
-    console.log('attestationResponse', authCallbackData.attestationResponse)
+    console.log('data', authCallbackData)
 
     if (authCallbackData.stamps.length > 0) {
       const decodedTokens = authCallbackData.stamps.map((stamp) => ({
@@ -136,6 +141,7 @@ export const Oauth: React.FC = () => {
     setTelegramAuthCallback(null)
     setTwitterAuthCallback(null)
     setRedditAuthCallback(null)
+    setCoinbaseAuthCallback(null)
     navigate(APP_PATHS.oauth)
     if (authCallbackData.stamps.length > 0) {
       onNetworkClick(networkName)
@@ -206,6 +212,9 @@ export const Oauth: React.FC = () => {
     if (redditAuthCallback && !isRedditAuthCallbackLoading) {
       saveAuthCallbackData('Reddit', redditAuthCallback)
     }
+    if (coinbaseAuthCallback && !isCoinbaseAuthCallbackLoading) {
+      saveAuthCallbackData('Coinbase', coinbaseAuthCallback)
+    }
   }, [
     appleAuthCallback,
     discordAuthCallback,
@@ -216,6 +225,7 @@ export const Oauth: React.FC = () => {
     telegramAuthCallback,
     twitterAuthCallback,
     redditAuthCallback,
+    coinbaseAuthCallback,
   ])
 
   useEffect(() => {
@@ -252,6 +262,9 @@ export const Oauth: React.FC = () => {
     if (type === 'reddit') {
       setRedditAuthCallback(code)
     }
+    if (type === 'coinbase') {
+      setCoinbaseAuthCallback(code)
+    }
   }, [])
 
   const isAuthUrlLoading =
@@ -262,7 +275,8 @@ export const Oauth: React.FC = () => {
     isGoogleAuthLoading ||
     isLinkedInAuthLoading ||
     isTelegramAuthLoading ||
-    isTwitterAuthLoading
+    isTwitterAuthLoading ||
+    isCoinbaseAuthLoading
 
   if (isAuthUrlLoading) {
     return (
@@ -281,6 +295,7 @@ export const Oauth: React.FC = () => {
     telegram: { auth: telegramAuth, loading: isTelegramAuthLoading },
     twitter: { auth: twitterAuth, loading: isTwitterAuthLoading },
     reddit: { auth: redditAuth, loading: isRedditAuthLoading },
+    coinbase: { auth: coinbaseAuth, loading: isCoinbaseAuthLoading },
   }
   const isCertificateExpire = (networkName: string) => {
     const fullName = networkName.toUpperCase() + '_DATA'
@@ -384,6 +399,12 @@ export const Oauth: React.FC = () => {
       rightIcon: <i className="bi bi-plus"></i>,
       isDisabled: false,
       name: 'Reddit',
+    },
+    {
+      leftIcon: <i className="bi bi-coinbase"></i>,
+      rightIcon: <i className="bi bi-plus"></i>,
+      isDisabled: false,
+      name: 'Coinbase',
     },
     {
       leftIcon: (

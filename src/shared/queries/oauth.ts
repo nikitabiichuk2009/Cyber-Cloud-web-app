@@ -691,3 +691,64 @@ export const useRedditAuthCallback = (
     }
   )
 }
+
+export const useCoinbaseAuth = (options?: any): UseQueryResult<AuthUrlResponse, AxiosError> => {
+  const toast = useToast()
+
+  return useQuery<AuthUrlResponse, AxiosError>(
+    QueriesKeysEnum.coinbaseAuth,
+    async () => {
+      const response = await axios.get<any, AuthUrlResponse>('/coinbaseAuthUrl')
+      return response
+    },
+    {
+      retry: false,
+      onError: (error: AxiosError) => {
+        toast({
+          position: 'top-right',
+          status: 'error',
+          title: error.message,
+          isClosable: true,
+        })
+      },
+      ...options,
+    }
+  )
+}
+
+export const useCoinbaseAuthCallback = (
+  code?: string | null,
+  options?: any
+): UseQueryResult<AuthUrlCallbackResponse, AxiosError> => {
+  const toast = useToast()
+
+  return useQuery<AuthUrlCallbackResponse, AxiosError>(
+    [QueriesKeysEnum.coinbaseAuthCallback, code],
+    async () => {
+      if (code) {
+        const response = await axios.get<any, AuthUrlCallbackResponse>('/coinbaseOAuthCallback', {
+          params: {
+            code,
+            privacy: 'only-me',
+          },
+        })
+        return response
+      } else {
+        return Promise.reject(new Error('No code provided'))
+      }
+    },
+    {
+      enabled: !!code,
+      retry: false,
+      onError: (error: AxiosError) => {
+        toast({
+          position: 'top-right',
+          status: 'error',
+          title: error.message,
+          isClosable: true,
+        })
+      },
+      ...options,
+    }
+  )
+}
