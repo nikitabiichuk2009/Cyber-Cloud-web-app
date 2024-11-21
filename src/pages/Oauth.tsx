@@ -32,6 +32,8 @@ import {
   useTwitterAuthCallback,
   useCoinbaseAuth,
   useCoinbaseAuthCallback,
+  useWorldIdAuth,
+  useWorldIdAuthCallback,
 } from '../shared/queries/oauth'
 import { useWeb3StampsMutation } from '../shared/mutations/sessions'
 import { connectMetamask } from '../services/metamask'
@@ -56,6 +58,7 @@ export const Oauth: React.FC = () => {
   const [TwitterAuthCallback, setTwitterAuthCallback] = useState<string | null>(null)
   const [RedditAuthCallback, setRedditAuthCallback] = useState<string | null>(null)
   const [CoinbaseAuthCallback, setCoinbaseAuthCallback] = useState<string | null>(null)
+  const [WorldIdAuthCallback, setWorldIdAuthCallback] = useState<string | null>(null)
   const { data: appleAuth, isLoading: isAppleAuthLoading } = useAppleAuth()
   const { data: discordAuth, isLoading: isDiscordAuthLoading } = useDiscordAuth()
   const { data: facebookAuth, isLoading: isFacebookAuthLoading } = useFacebookAuth()
@@ -66,6 +69,7 @@ export const Oauth: React.FC = () => {
   const { data: twitterAuth, isLoading: isTwitterAuthLoading } = useTwitterAuth()
   const { data: redditAuth, isLoading: isRedditAuthLoading } = useRedditAuth()
   const { data: coinbaseAuth, isLoading: isCoinbaseAuthLoading } = useCoinbaseAuth()
+  const { data: worldIdAuth, isLoading: isWorldIdAuthLoading } = useWorldIdAuth()
   const { data: appleAuthCallback, isLoading: isAppleAuthCallbackLoading } =
     useAppleAuthCallback(AppleAuthCallback)
   const { data: discordAuthCallback, isLoading: isDiscordAuthCallbackLoading } =
@@ -86,6 +90,8 @@ export const Oauth: React.FC = () => {
     useRedditAuthCallback(RedditAuthCallback)
   const { data: coinbaseAuthCallback, isLoading: isCoinbaseAuthCallbackLoading } =
     useCoinbaseAuthCallback(CoinbaseAuthCallback)
+  const { data: worldIdAuthCallback, isLoading: isWorldIdAuthCallbackLoading } =
+    useWorldIdAuthCallback(WorldIdAuthCallback)
 
   const saveAuthCallbackData = (
     networkName: string,
@@ -142,6 +148,7 @@ export const Oauth: React.FC = () => {
     setTwitterAuthCallback(null)
     setRedditAuthCallback(null)
     setCoinbaseAuthCallback(null)
+    setWorldIdAuthCallback(null)
     navigate(APP_PATHS.oauth)
     if (authCallbackData.stamps.length > 0) {
       onNetworkClick(networkName)
@@ -215,6 +222,9 @@ export const Oauth: React.FC = () => {
     if (coinbaseAuthCallback && !isCoinbaseAuthCallbackLoading) {
       saveAuthCallbackData('Coinbase', coinbaseAuthCallback)
     }
+    if (worldIdAuthCallback && !isWorldIdAuthCallbackLoading) {
+      saveAuthCallbackData('WorldId', worldIdAuthCallback)
+    }
   }, [
     appleAuthCallback,
     discordAuthCallback,
@@ -226,6 +236,7 @@ export const Oauth: React.FC = () => {
     twitterAuthCallback,
     redditAuthCallback,
     coinbaseAuthCallback,
+    worldIdAuthCallback,
   ])
 
   useEffect(() => {
@@ -265,6 +276,9 @@ export const Oauth: React.FC = () => {
     if (type === 'coinbase') {
       setCoinbaseAuthCallback(code)
     }
+    if (type === 'worldid') {
+      setWorldIdAuthCallback(code)
+    }
   }, [])
 
   const isAuthUrlLoading =
@@ -296,6 +310,7 @@ export const Oauth: React.FC = () => {
     twitter: { auth: twitterAuth, loading: isTwitterAuthLoading },
     reddit: { auth: redditAuth, loading: isRedditAuthLoading },
     coinbase: { auth: coinbaseAuth, loading: isCoinbaseAuthLoading },
+    worldid: { auth: worldIdAuth, loading: isWorldIdAuthLoading },
   }
   const isCertificateExpire = (networkName: string) => {
     const fullName = networkName.toUpperCase() + '_DATA'
@@ -401,10 +416,38 @@ export const Oauth: React.FC = () => {
       name: 'Reddit',
     },
     {
-      leftIcon: <i className="bi bi-coinbase"></i>,
+      leftIcon: (
+        <img
+          src="/images/coinbase.png"
+          alt="coinbase icon"
+          width={32}
+          height={32}
+          style={{
+            filter:
+              'brightness(0) saturate(100%) invert(89%) sepia(19%) saturate(1011%) hue-rotate(18deg) brightness(104%) contrast(98%)',
+          }}
+        />
+      ),
       rightIcon: <i className="bi bi-plus"></i>,
       isDisabled: false,
       name: 'Coinbase',
+    },
+    {
+      leftIcon: (
+        <img
+          src="/images/worldID.png"
+          alt="worldid icon"
+          width={32}
+          height={32}
+          style={{
+            filter:
+              'brightness(0) saturate(100%) invert(89%) sepia(19%) saturate(1011%) hue-rotate(18deg) brightness(104%) contrast(98%)',
+          }}
+        />
+      ),
+      rightIcon: <i className="bi bi-plus"></i>,
+      isDisabled: false,
+      name: 'WorldID',
     },
     {
       leftIcon: (

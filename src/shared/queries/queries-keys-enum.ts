@@ -19,4 +19,6 @@ export const enum QueriesKeysEnum {
   twitterAuthCallback = 'twitterAuthCallback',
   redditAuth = 'redditAuth',
   redditAuthCallback = 'redditAuthCallback',
+  worldIdAuth = 'worldIdAuth',
+  worldIdAuthCallback = 'worldIdAuthCallback',
 }

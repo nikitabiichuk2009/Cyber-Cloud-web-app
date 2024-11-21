@@ -726,12 +726,15 @@ export const useCoinbaseAuthCallback = (
     [QueriesKeysEnum.coinbaseAuthCallback, code],
     async () => {
       if (code) {
-        const response = await axios.get<any, AuthUrlCallbackResponse>('/coinbaseOAuthCallback', {
-          params: {
-            code,
-            privacy: 'only-me',
-          },
-        })
+        const response = await axios.get<any, AuthUrlCallbackResponse>(
+          '/coinbaseOAuthCallback',
+          {
+            params: {
+              code,
+              privacy: 'only-me',
+            },
+          }
+        )
         return response
       } else {
         return Promise.reject(new Error('No code provided'))
@@ -747,6 +750,57 @@ export const useCoinbaseAuthCallback = (
           title: error.message,
           isClosable: true,
         })
+      },
+      ...options,
+    }
+  )
+}
+
+export const useWorldIdAuth = (options?: any): UseQueryResult<AuthUrlResponse, AxiosError> => {
+  const toast = useToast()
+
+  return useQuery<AuthUrlResponse, AxiosError>(
+    QueriesKeysEnum.worldIdAuth,
+    async () => {
+      const response = await axios.get<any, AuthUrlResponse>('/worldIdAuthUrl')
+      return response
+    },
+    {
+      retry: false,
+      onError: (error: AxiosError) => {
+        toast({ position: 'top-right', status: 'error', title: error.message, isClosable: true })
+      },
+      ...options,
+    }
+  )
+}
+
+export const useWorldIdAuthCallback = (
+  code?: string | null,
+  options?: any
+): UseQueryResult<AuthUrlCallbackResponse, AxiosError> => {
+  const toast = useToast()
+
+  return useQuery<AuthUrlCallbackResponse, AxiosError>(
+    [QueriesKeysEnum.worldIdAuthCallback, code],
+    async () => {
+      if (code) {
+        const response = await axios.get<any, AuthUrlCallbackResponse>('/worldIdOAuthCallback', {
+          params: {
+            code,
+            privacy: 'only-me',
+          },
+        })
+        return response
+      } else {
+        return Promise.reject(new Error('No code provided'))
+      }
+    },
+    {
+      enabled: !!code,
+      retry: false,
+      onError: (error: AxiosError) => {
+        toast({ position: 'top-right', status: 'error', title: error.message, isClosable: true })
       },
       ...options,
     }
