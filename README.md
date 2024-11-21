@@ -10,7 +10,7 @@
 
 [DEPLOYED DEV APP](https://cyber-cloud-web-app-n.vercel.app)
 
-![](docs/connectors.png)
+![](docs/demo.png)
 
 ## Project based on React + Chakra-ui + TypeScript + Vite
 
