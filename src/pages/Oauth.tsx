@@ -244,6 +244,10 @@ export const Oauth: React.FC = () => {
     const type = params.get('type') as string
     const code = params.get('code') as string
 
+    if (!type && code) {
+      setWorldIdAuthCallback(code)
+    }
+
     if (type === 'apple') {
       const id_token = params.get('id_token') as string
       setAppleAuthCallback(id_token)
@@ -276,9 +280,9 @@ export const Oauth: React.FC = () => {
     if (type === 'coinbase') {
       setCoinbaseAuthCallback(code)
     }
-    if (type === 'worldId') {
-      setWorldIdAuthCallback(code)
-    }
+    // if (type === 'worldId') {
+    //   setWorldIdAuthCallback(code)
+    // } broken
   }, [])
 
   const isAuthUrlLoading =
