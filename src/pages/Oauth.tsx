@@ -339,7 +339,7 @@ export const Oauth: React.FC = () => {
 
   const onNetworkClick = (networkName: string) => {
     const networkNameLowercase =
-      networkName === 'WorldId' ? 'WorldId' : networkName.toLowerCase()
+      networkName === 'WorldId' ? 'worldId' : networkName.toLowerCase()
     const fullName = networkName.toUpperCase() + '_DATA'
     const storageData = localStorage.getItem(fullName)
 
