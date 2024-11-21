@@ -276,7 +276,7 @@ export const Oauth: React.FC = () => {
     if (type === 'coinbase') {
       setCoinbaseAuthCallback(code)
     }
-    if (type === 'worldid') {
+    if (type === 'worldId') {
       setWorldIdAuthCallback(code)
     }
   }, [])
@@ -310,7 +310,7 @@ export const Oauth: React.FC = () => {
     twitter: { auth: twitterAuth, loading: isTwitterAuthLoading },
     reddit: { auth: redditAuth, loading: isRedditAuthLoading },
     coinbase: { auth: coinbaseAuth, loading: isCoinbaseAuthLoading },
-    worldid: { auth: worldIdAuth, loading: isWorldIdAuthLoading },
+    worldId: { auth: worldIdAuth, loading: isWorldIdAuthLoading },
   }
   const isCertificateExpire = (networkName: string) => {
     const fullName = networkName.toUpperCase() + '_DATA'
@@ -436,7 +436,7 @@ export const Oauth: React.FC = () => {
       leftIcon: (
         <img
           src="/images/worldID.png"
-          alt="worldid icon"
+          alt="worldId icon"
           width={32}
           height={32}
           style={{
