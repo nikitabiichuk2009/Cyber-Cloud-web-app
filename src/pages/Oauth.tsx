@@ -338,7 +338,8 @@ export const Oauth: React.FC = () => {
   }
 
   const onNetworkClick = (networkName: string) => {
-    const networkNameLowercase = networkName.toLowerCase()
+    const networkNameLowercase =
+      networkName === 'WorldId' ? 'WorldId' : networkName.toLowerCase()
     const fullName = networkName.toUpperCase() + '_DATA'
     const storageData = localStorage.getItem(fullName)
 
@@ -447,7 +448,7 @@ export const Oauth: React.FC = () => {
       ),
       rightIcon: <i className="bi bi-plus"></i>,
       isDisabled: false,
-      name: 'WorldID',
+      name: 'WorldId',
     },
     {
       leftIcon: (
