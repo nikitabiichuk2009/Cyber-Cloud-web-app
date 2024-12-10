@@ -256,12 +256,8 @@ export const Oauth: React.FC = () => {
     const code = params.get('code') as string
     console.log('code', code)
 
-    // if (!type && code) {
-    //   setWorldIdAuthCallback(code)
-    // } for now we don't need this
-
     if (!type && code) {
-      setTikTokAuthCallback(code)
+      setWorldIdAuthCallback(code)
     }
 
     if (type === 'apple') {
