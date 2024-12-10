@@ -34,6 +34,8 @@ import {
   useCoinbaseAuthCallback,
   useWorldIdAuth,
   useWorldIdAuthCallback,
+  useTikTokAuth,
+  useTikTokAuthCallback,  
 } from '../shared/queries/oauth'
 import { useWeb3StampsMutation } from '../shared/mutations/sessions'
 import { connectMetamask } from '../services/metamask'
@@ -59,6 +61,7 @@ export const Oauth: React.FC = () => {
   const [RedditAuthCallback, setRedditAuthCallback] = useState<string | null>(null)
   const [CoinbaseAuthCallback, setCoinbaseAuthCallback] = useState<string | null>(null)
   const [WorldIdAuthCallback, setWorldIdAuthCallback] = useState<string | null>(null)
+  const [TikTokAuthCallback, setTikTokAuthCallback] = useState<string | null>(null)
   const { data: appleAuth, isLoading: isAppleAuthLoading } = useAppleAuth()
   const { data: discordAuth, isLoading: isDiscordAuthLoading } = useDiscordAuth()
   const { data: facebookAuth, isLoading: isFacebookAuthLoading } = useFacebookAuth()
@@ -70,8 +73,11 @@ export const Oauth: React.FC = () => {
   const { data: redditAuth, isLoading: isRedditAuthLoading } = useRedditAuth()
   const { data: coinbaseAuth, isLoading: isCoinbaseAuthLoading } = useCoinbaseAuth()
   const { data: worldIdAuth, isLoading: isWorldIdAuthLoading } = useWorldIdAuth()
+  const { data: tikTokAuth, isLoading: isTikTokAuthLoading } = useTikTokAuth()
   const { data: appleAuthCallback, isLoading: isAppleAuthCallbackLoading } =
     useAppleAuthCallback(AppleAuthCallback)
+  const { data: tikTokAuthCallback, isLoading: isTikTokAuthCallbackLoading } =
+    useTikTokAuthCallback(TikTokAuthCallback)
   const { data: discordAuthCallback, isLoading: isDiscordAuthCallbackLoading } =
     useDiscordAuthCallback(DiscordAuthCallback)
   const { data: facebookAuthCallback, isLoading: isFacebookAuthCallbackLoading } =
@@ -149,6 +155,7 @@ export const Oauth: React.FC = () => {
     setRedditAuthCallback(null)
     setCoinbaseAuthCallback(null)
     setWorldIdAuthCallback(null)
+    setTikTokAuthCallback(null)
     navigate(APP_PATHS.oauth)
     if (authCallbackData.stamps.length > 0) {
       onNetworkClick(networkName)
@@ -225,6 +232,9 @@ export const Oauth: React.FC = () => {
     if (worldIdAuthCallback && !isWorldIdAuthCallbackLoading) {
       saveAuthCallbackData('WorldId', worldIdAuthCallback)
     }
+    if (tikTokAuthCallback && !isTikTokAuthCallbackLoading) {
+      saveAuthCallbackData('TikTok', tikTokAuthCallback)
+    }
   }, [
     appleAuthCallback,
     discordAuthCallback,
@@ -237,6 +247,7 @@ export const Oauth: React.FC = () => {
     redditAuthCallback,
     coinbaseAuthCallback,
     worldIdAuthCallback,
+    tikTokAuthCallback,
   ])
 
   useEffect(() => {
@@ -244,8 +255,12 @@ export const Oauth: React.FC = () => {
     const type = params.get('type') as string
     const code = params.get('code') as string
 
+    // if (!type && code) {
+    //   setWorldIdAuthCallback(code)
+    // } for now we don't need this
+
     if (!type && code) {
-      setWorldIdAuthCallback(code)
+      setTikTokAuthCallback(code)
     }
 
     if (type === 'apple') {
@@ -280,6 +295,9 @@ export const Oauth: React.FC = () => {
     if (type === 'coinbase') {
       setCoinbaseAuthCallback(code)
     }
+    // if (type === 'tiktok') {
+    //   setTikTokAuthCallback(code)
+    // }
     // if (type === 'worldId') {
     //   setWorldIdAuthCallback(code)
     // } broken
@@ -294,7 +312,8 @@ export const Oauth: React.FC = () => {
     isLinkedInAuthLoading ||
     isTelegramAuthLoading ||
     isTwitterAuthLoading ||
-    isCoinbaseAuthLoading
+    isCoinbaseAuthLoading ||
+    isTikTokAuthCallbackLoading
 
   if (isAuthUrlLoading) {
     return (
@@ -315,6 +334,7 @@ export const Oauth: React.FC = () => {
     reddit: { auth: redditAuth, loading: isRedditAuthLoading },
     coinbase: { auth: coinbaseAuth, loading: isCoinbaseAuthLoading },
     worldId: { auth: worldIdAuth, loading: isWorldIdAuthLoading },
+    tiktok: { auth: tikTokAuth, loading: isTikTokAuthLoading },
   }
   const isCertificateExpire = (networkName: string) => {
     const fullName = networkName.toUpperCase() + '_DATA'
@@ -419,6 +439,12 @@ export const Oauth: React.FC = () => {
       rightIcon: <i className="bi bi-plus"></i>,
       isDisabled: false,
       name: 'Reddit',
+    },
+    {
+      leftIcon: <i className="bi bi-tiktok"></i>,
+      rightIcon: <i className="bi bi-plus"></i>,
+      isDisabled: false,
+      name: 'TikTok',
     },
     {
       leftIcon: (

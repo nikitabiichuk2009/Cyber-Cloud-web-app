@@ -806,3 +806,89 @@ export const useWorldIdAuthCallback = (
     }
   )
 }
+
+export const useTikTokAuth = (options?: any): UseQueryResult<AuthUrlResponse, AxiosError> => {
+  const toast = useToast()
+
+  return useQuery<AuthUrlResponse, AxiosError>(
+    QueriesKeysEnum.tikTokAuth,
+    async () => {
+      let codeChallenge = ''
+      let codeVerifier = localStorage.getItem('tiktok_code_verifier')
+
+      if (!codeVerifier) {
+        codeVerifier = generateCodeVerifier()
+        codeChallenge = await generateCodeChallenge(codeVerifier)
+        localStorage.setItem('tiktok_code_verifier', codeVerifier)
+        console.log(`Generated TikTok codeVerifier: ${codeVerifier}`)
+      } else {
+        codeChallenge = await generateCodeChallenge(codeVerifier)
+        console.log(`Using existing TikTok codeVerifier: ${codeVerifier}`)
+      }
+
+      const response = await axios.get<any, AuthUrlResponse>('/tikTokAuthUrl', {
+        params: { codeChallenge },
+      })
+
+      return response
+    },
+    {
+      retry: false,
+      onError: (error: AxiosError) => {
+        toast({
+          position: 'top-right',
+          status: 'error',
+          title: error.message,
+          isClosable: true,
+        })
+      },
+      ...options,
+    }
+  )
+}
+
+export const useTikTokAuthCallback = (
+  code?: string | null,
+  options?: any
+): UseQueryResult<AuthUrlCallbackResponse, AxiosError> => {
+  const toast = useToast()
+
+  return useQuery<AuthUrlCallbackResponse, AxiosError>(
+    [QueriesKeysEnum.tikTokAuthCallback, code],
+    async () => {
+      if (code) {
+        const codeVerifier = localStorage.getItem('tiktok_code_verifier')
+        if (!codeVerifier) {
+          throw new Error('Missing TikTok codeVerifier')
+        }
+
+        const response = await axios.get<any, AuthUrlCallbackResponse>('/tikTokOAuthCallback', {
+          params: {
+            code,
+            codeVerifier,
+            privacy: 'only-me',
+          },
+        })
+
+        localStorage.removeItem('tiktok_code_verifier')
+
+        return response
+      } else {
+        return Promise.reject(new Error('No code provided'))
+      }
+    },
+    {
+      enabled: !!code,
+      retry: false,
+      onError: (error: AxiosError) => {
+        toast({
+          position: 'top-right',
+          status: 'error',
+          title: error.message,
+          isClosable: true,
+        })
+      },
+      ...options,
+    }
+  )
+}
