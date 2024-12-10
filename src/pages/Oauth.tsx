@@ -254,6 +254,7 @@ export const Oauth: React.FC = () => {
     const params = new URLSearchParams(location.search)
     const type = params.get('type') as string
     const code = params.get('code') as string
+    console.log('code', code)
 
     // if (!type && code) {
     //   setWorldIdAuthCallback(code)
