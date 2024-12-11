@@ -27,7 +27,7 @@
 
 [DEPLOYED DEV APP](https://cyber-cloud-web-app-n.vercel.app)
 
-![](docs/demo.png)
+![](docs/demo-oauth-page.png)
 
 ## Project based on React + Chakra-ui + TypeScript + Vite
 
