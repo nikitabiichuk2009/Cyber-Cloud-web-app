@@ -1,5 +1,22 @@
 # Cyber Cloud Web APP
 
+**We issue stamps based on the following connectors:**
+
+- TikTok
+- Instagram
+- Twitter (X)
+- LinkedIn
+- Facebook
+- Google
+- Discord
+- Telegram
+- Reddit
+- GitHub
+- Apple
+- Coinbase
+- WorldID
+- Web3 (MetaMask)
+
 ## UI
 
 [BACKEND DOCS](https://cyber-cloud-issuer-api-8bbb9d6fb18a.herokuapp.com/docs)
