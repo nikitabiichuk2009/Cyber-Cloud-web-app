@@ -35,7 +35,9 @@ import {
   useWorldIdAuth,
   useWorldIdAuthCallback,
   useTikTokAuth,
-  useTikTokAuthCallback,  
+  useTikTokAuthCallback,
+  useInstagramAuth,
+  useInstagramAuthCallback,
 } from '../shared/queries/oauth'
 import { useWeb3StampsMutation } from '../shared/mutations/sessions'
 import { connectMetamask } from '../services/metamask'
@@ -62,6 +64,7 @@ export const Oauth: React.FC = () => {
   const [CoinbaseAuthCallback, setCoinbaseAuthCallback] = useState<string | null>(null)
   const [WorldIdAuthCallback, setWorldIdAuthCallback] = useState<string | null>(null)
   const [TikTokAuthCallback, setTikTokAuthCallback] = useState<string | null>(null)
+  const [InstagramAuthCallback, setInstagramAuthCallback] = useState<string | null>(null)
   const { data: appleAuth, isLoading: isAppleAuthLoading } = useAppleAuth()
   const { data: discordAuth, isLoading: isDiscordAuthLoading } = useDiscordAuth()
   const { data: facebookAuth, isLoading: isFacebookAuthLoading } = useFacebookAuth()
@@ -74,6 +77,7 @@ export const Oauth: React.FC = () => {
   const { data: coinbaseAuth, isLoading: isCoinbaseAuthLoading } = useCoinbaseAuth()
   const { data: worldIdAuth, isLoading: isWorldIdAuthLoading } = useWorldIdAuth()
   const { data: tikTokAuth, isLoading: isTikTokAuthLoading } = useTikTokAuth()
+  const { data: instagramAuth, isLoading: isInstagramAuthLoading } = useInstagramAuth()
   const { data: appleAuthCallback, isLoading: isAppleAuthCallbackLoading } =
     useAppleAuthCallback(AppleAuthCallback)
   const { data: tikTokAuthCallback, isLoading: isTikTokAuthCallbackLoading } =
@@ -98,6 +102,8 @@ export const Oauth: React.FC = () => {
     useCoinbaseAuthCallback(CoinbaseAuthCallback)
   const { data: worldIdAuthCallback, isLoading: isWorldIdAuthCallbackLoading } =
     useWorldIdAuthCallback(WorldIdAuthCallback)
+  const { data: instagramAuthCallback, isLoading: isInstagramAuthCallbackLoading } =
+    useInstagramAuthCallback(InstagramAuthCallback)
 
   const saveAuthCallbackData = (
     networkName: string,
@@ -156,6 +162,7 @@ export const Oauth: React.FC = () => {
     setCoinbaseAuthCallback(null)
     setWorldIdAuthCallback(null)
     setTikTokAuthCallback(null)
+    setInstagramAuthCallback(null)
     navigate(APP_PATHS.oauth)
     if (authCallbackData.stamps.length > 0) {
       onNetworkClick(networkName)
@@ -235,6 +242,9 @@ export const Oauth: React.FC = () => {
     if (tikTokAuthCallback && !isTikTokAuthCallbackLoading) {
       saveAuthCallbackData('TikTok', tikTokAuthCallback)
     }
+    if (instagramAuthCallback && !isInstagramAuthCallbackLoading) {
+      saveAuthCallbackData('Instagram', instagramAuthCallback)
+    }
   }, [
     appleAuthCallback,
     discordAuthCallback,
@@ -248,6 +258,7 @@ export const Oauth: React.FC = () => {
     coinbaseAuthCallback,
     worldIdAuthCallback,
     tikTokAuthCallback,
+    instagramAuthCallback,
   ])
 
   useEffect(() => {
@@ -260,10 +271,12 @@ export const Oauth: React.FC = () => {
     //   setWorldIdAuthCallback(code)
     // } for now we don't need this
 
+    // if (!type && code) {
+    //   setTikTokAuthCallback(code)
+    // }
     if (!type && code) {
-      setTikTokAuthCallback(code)
+      setInstagramAuthCallback(code)
     }
-
     if (type === 'apple') {
       const id_token = params.get('id_token') as string
       setAppleAuthCallback(id_token)
@@ -296,6 +309,9 @@ export const Oauth: React.FC = () => {
     if (type === 'coinbase') {
       setCoinbaseAuthCallback(code)
     }
+    // if (type === 'instagram') {
+    //   setInstagramAuthCallback(code)
+    // }
     // if (type === 'tiktok') {
     //   setTikTokAuthCallback(code)
     // }
@@ -314,7 +330,8 @@ export const Oauth: React.FC = () => {
     isTelegramAuthLoading ||
     isTwitterAuthLoading ||
     isCoinbaseAuthLoading ||
-    isTikTokAuthCallbackLoading
+    isTikTokAuthCallbackLoading ||
+    isInstagramAuthCallbackLoading
 
   if (isAuthUrlLoading) {
     return (
@@ -336,6 +353,7 @@ export const Oauth: React.FC = () => {
     coinbase: { auth: coinbaseAuth, loading: isCoinbaseAuthLoading },
     worldId: { auth: worldIdAuth, loading: isWorldIdAuthLoading },
     tiktok: { auth: tikTokAuth, loading: isTikTokAuthLoading },
+    instagram: { auth: instagramAuth, loading: isInstagramAuthLoading },
   }
   const isCertificateExpire = (networkName: string) => {
     const fullName = networkName.toUpperCase() + '_DATA'
@@ -446,6 +464,12 @@ export const Oauth: React.FC = () => {
       rightIcon: <i className="bi bi-plus"></i>,
       isDisabled: false,
       name: 'TikTok',
+    },
+    {
+      leftIcon: <i className="bi bi-instagram"></i>,
+      rightIcon: <i className="bi bi-plus"></i>,
+      isDisabled: false,
+      name: 'Instagram',
     },
     {
       leftIcon: (
