@@ -8,6 +8,7 @@
 - LinkedIn
 - Facebook
 - Google
+- Youtube
 - Discord
 - Telegram
 - Reddit

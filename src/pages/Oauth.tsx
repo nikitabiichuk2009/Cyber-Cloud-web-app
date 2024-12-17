@@ -38,6 +38,8 @@ import {
   useTikTokAuthCallback,
   useInstagramAuth,
   useInstagramAuthCallback,
+  useYoutubeAuth,
+  useYoutubeAuthCallback,
 } from '../shared/queries/oauth'
 import { useWeb3StampsMutation } from '../shared/mutations/sessions'
 import { connectMetamask } from '../services/metamask'
@@ -65,6 +67,7 @@ export const Oauth: React.FC = () => {
   const [WorldIdAuthCallback, setWorldIdAuthCallback] = useState<string | null>(null)
   const [TikTokAuthCallback, setTikTokAuthCallback] = useState<string | null>(null)
   const [InstagramAuthCallback, setInstagramAuthCallback] = useState<string | null>(null)
+  const [YoutubeAuthCallback, setYoutubeAuthCallback] = useState<string | null>(null)
   const { data: appleAuth, isLoading: isAppleAuthLoading } = useAppleAuth()
   const { data: discordAuth, isLoading: isDiscordAuthLoading } = useDiscordAuth()
   const { data: facebookAuth, isLoading: isFacebookAuthLoading } = useFacebookAuth()
@@ -78,6 +81,7 @@ export const Oauth: React.FC = () => {
   const { data: worldIdAuth, isLoading: isWorldIdAuthLoading } = useWorldIdAuth()
   const { data: tikTokAuth, isLoading: isTikTokAuthLoading } = useTikTokAuth()
   const { data: instagramAuth, isLoading: isInstagramAuthLoading } = useInstagramAuth()
+  const { data: youtubeAuth, isLoading: isYoutubeAuthLoading } = useYoutubeAuth()
   const { data: appleAuthCallback, isLoading: isAppleAuthCallbackLoading } =
     useAppleAuthCallback(AppleAuthCallback)
   const { data: tikTokAuthCallback, isLoading: isTikTokAuthCallbackLoading } =
@@ -104,6 +108,8 @@ export const Oauth: React.FC = () => {
     useWorldIdAuthCallback(WorldIdAuthCallback)
   const { data: instagramAuthCallback, isLoading: isInstagramAuthCallbackLoading } =
     useInstagramAuthCallback(InstagramAuthCallback)
+  const { data: youtubeAuthCallback, isLoading: isYoutubeAuthCallbackLoading } =
+    useYoutubeAuthCallback(YoutubeAuthCallback)
 
   const saveAuthCallbackData = (
     networkName: string,
@@ -163,6 +169,7 @@ export const Oauth: React.FC = () => {
     setWorldIdAuthCallback(null)
     setTikTokAuthCallback(null)
     setInstagramAuthCallback(null)
+    setYoutubeAuthCallback(null)
     navigate(APP_PATHS.oauth)
     if (authCallbackData.stamps.length > 0) {
       onNetworkClick(networkName)
@@ -245,6 +252,9 @@ export const Oauth: React.FC = () => {
     if (instagramAuthCallback && !isInstagramAuthCallbackLoading) {
       saveAuthCallbackData('Instagram', instagramAuthCallback)
     }
+    if (youtubeAuthCallback && !isYoutubeAuthCallbackLoading) {
+      saveAuthCallbackData('Youtube', youtubeAuthCallback)
+    }
   }, [
     appleAuthCallback,
     discordAuthCallback,
@@ -259,6 +269,7 @@ export const Oauth: React.FC = () => {
     worldIdAuthCallback,
     tikTokAuthCallback,
     instagramAuthCallback,
+    youtubeAuthCallback,
   ])
 
   useEffect(() => {
@@ -309,6 +320,9 @@ export const Oauth: React.FC = () => {
     if (type === 'coinbase') {
       setCoinbaseAuthCallback(code)
     }
+    if (type === 'youtube') {
+      setYoutubeAuthCallback(code)
+    }
     // if (type === 'instagram') {
     //   setInstagramAuthCallback(code)
     // }
@@ -331,7 +345,8 @@ export const Oauth: React.FC = () => {
     isTwitterAuthLoading ||
     isCoinbaseAuthLoading ||
     isTikTokAuthCallbackLoading ||
-    isInstagramAuthCallbackLoading
+    isInstagramAuthCallbackLoading ||
+    isYoutubeAuthCallbackLoading
 
   if (isAuthUrlLoading) {
     return (
@@ -354,6 +369,7 @@ export const Oauth: React.FC = () => {
     worldId: { auth: worldIdAuth, loading: isWorldIdAuthLoading },
     tiktok: { auth: tikTokAuth, loading: isTikTokAuthLoading },
     instagram: { auth: instagramAuth, loading: isInstagramAuthLoading },
+    youtube: { auth: youtubeAuth, loading: isYoutubeAuthLoading },
   }
   const isCertificateExpire = (networkName: string) => {
     const fullName = networkName.toUpperCase() + '_DATA'
@@ -434,6 +450,12 @@ export const Oauth: React.FC = () => {
       rightIcon: <i className="bi bi-plus"></i>,
       isDisabled: false,
       name: 'Google',
+    },
+    {
+      leftIcon: <i className="bi bi-youtube"></i>,
+      rightIcon: <i className="bi bi-plus"></i>,
+      isDisabled: false,
+      name: 'Youtube',
     },
     {
       leftIcon: <i className="bi bi-linkedin"></i>,

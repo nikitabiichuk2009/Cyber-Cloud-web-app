@@ -956,3 +956,92 @@ export const useInstagramAuthCallback = (
     }
   )
 }
+
+export const useYoutubeAuth = (options?: any): UseQueryResult<AuthUrlResponse, AxiosError> => {
+  const toast = useToast()
+
+  return useQuery<AuthUrlResponse, AxiosError>(
+    QueriesKeysEnum.youtubeAuth,
+    async () => {
+      let codeChallenge = ''
+      let codeVerifier = localStorage.getItem('youtube_code_verifier')
+
+      if (!codeVerifier) {
+        codeVerifier = generateCodeVerifier()
+        codeChallenge = await generateCodeChallenge(codeVerifier)
+        localStorage.setItem('youtube_code_verifier', codeVerifier)
+        console.log(`Generated YouTube codeVerifier: ${codeVerifier}`)
+      } else {
+        codeChallenge = await generateCodeChallenge(codeVerifier)
+        console.log(`Using existing YouTube codeVerifier: ${codeVerifier}`)
+      }
+
+      const response = await axios.get<any, AuthUrlResponse>('/youtubeAuthUrl', {
+        params: { codeChallenge },
+      })
+
+      return response
+    },
+    {
+      retry: false,
+      onError: (error: AxiosError) => {
+        toast({
+          position: 'top-right',
+          status: 'error',
+          title: error.message,
+          isClosable: true,
+        })
+      },
+      ...options,
+    }
+  )
+}
+
+export const useYoutubeAuthCallback = (
+  code?: string | null,
+  options?: any
+): UseQueryResult<AuthUrlCallbackResponse, AxiosError> => {
+  const toast = useToast()
+
+  return useQuery<AuthUrlCallbackResponse, AxiosError>(
+    [QueriesKeysEnum.youtubeAuthCallback, code],
+    async () => {
+      if (code) {
+        const codeVerifier = localStorage.getItem('youtube_code_verifier')
+        if (!codeVerifier) {
+          throw new Error('Missing YouTube codeVerifier')
+        }
+
+        const response = await axios.get<any, AuthUrlCallbackResponse>(
+          '/youtubeOAuthCallback',
+          {
+            params: {
+              code,
+              codeVerifier,
+              privacy: 'only-me',
+            },
+          }
+        )
+
+        localStorage.removeItem('youtube_code_verifier')
+
+        return response
+      } else {
+        return Promise.reject(new Error('No code provided'))
+      }
+    },
+    {
+      enabled: !!code,
+      retry: false,
+      onError: (error: AxiosError) => {
+        toast({
+          position: 'top-right',
+          status: 'error',
+          title: error.message,
+          isClosable: true,
+        })
+      },
+      ...options,
+    }
+  )
+}

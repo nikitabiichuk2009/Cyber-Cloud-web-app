@@ -25,4 +25,6 @@ export const enum QueriesKeysEnum {
   tikTokAuthCallback = 'tikTokAuthCallback',
   instagramAuth = 'instagramAuth',
   instagramAuthCallback = 'instagramAuthCallback',
+  youtubeAuth = 'youtubeAuth',
+  youtubeAuthCallback = 'youtubeAuthCallback',
 }
